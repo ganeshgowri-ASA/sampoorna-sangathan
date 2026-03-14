@@ -1,90 +1,142 @@
-# AGENTS.md - SampoornaSangathan Claude Code IDE Guide
+# AGENTS.md - SampoornaSangathan Odoo Custom Addons Guide
+
+## Project: SampoornaSangathan (Unified Organisation OS)
+## Platform: Odoo 17 Community Edition
+## Working Directory: ~/odoo/custom-addons/
+## Database: sampoorna-sangathan
+## Odoo URL: http://localhost:8069
+
+---
 
 ## Sacred Principles
-1. UNDERSTAND before coding - read context, PRD, existing code
-2. ONE session = ONE feature branch = ONE module/fix
-3. NEVER modify code outside your session scope
-4. TEST every change before committing
-5. ROLLBACK if tests fail - never force merge broken code
+1. This is an ODOO project - all modules are Python Odoo addons, NOT Next.js/React
+2. ONE session = ONE Odoo module in ~/odoo/custom-addons/{module_name}/
+3. NEVER modify Odoo core files - only custom-addons/
+4. TEST via Odoo shell and module upgrade before committing
+5. Each module MUST have proper __manifest__.py with dependencies
+6. ROLLBACK if module install fails - never leave DB in broken state
 
-## PDCA Agile Cycle
+---
 
-### P (Plan)
-- Read PRD in Notion: SampoornaSangathan PRD
-- Check GitHub Issues for current sprint tasks
-- Create feature branch: `feat/S{phase}.{session}-{description}`
-- Define acceptance criteria before coding
-
-### D (Do)
-- Code the feature in isolated branch
-- Follow monorepo structure: modules/{module-name}/
-- Use shared packages: packages/ui, packages/db, packages/types
-- Commit frequently with conventional commits
-
-### C (Check)
-- Run: `pnpm lint && pnpm typecheck && pnpm test`
-- Verify Vercel preview deployment works
-- Check Prisma schema compatibility with Railway PostgreSQL
-- Test Odoo API connector if applicable
-- Manual QA: verify UI, workflows, auth
-
-### A (Act)
-- Create PR to main with detailed description
-- Review diff line-by-line
-- Merge only if all checks pass
-- Vercel auto-deploys on merge to main
-- Tag release if milestone reached
-
-## Integration Map
-
+## Environment Setup
 ```
-GitHub (sampoorna-sangathan)
-  |-- push/merge --> Vercel (auto-deploy frontend)
-  |-- push/merge --> GitHub Actions (CI: lint, test, typecheck)
-  |-- Prisma migrate --> Railway PostgreSQL (database)
-  |-- API calls --> Odoo (localhost:8069, WSL2 - ERP backend)
-  |-- Claude Code IDE sessions (dev branches)
+Odoo Path: /home/eechie/odoo/community
+Venv: /home/eechie/odoo/venv/bin/python
+Config: /home/eechie/odoo/cfg/odoo.conf
+Custom Addons: ~/odoo/custom-addons/
+DB User: eechie
+DB Name: sampoorna-sangathan
 ```
 
-## Branch Strategy
-- `main` - production (protected, auto-deploy to Vercel)
-- `develop` - integration branch
-- `feat/S{X}.{Y}-description` - feature branches
-- `fix/description` - bug fixes
-- `hotfix/description` - urgent production fixes
+## Useful Commands
+```bash
+# Restart Odoo with module update
+cd /home/eechie/odoo/community && /home/eechie/odoo/venv/bin/python odoo-bin -d sampoorna-sangathan -c /home/eechie/odoo/cfg/odoo.conf -u {module_name} --stop-after-init
 
-## Module Development Order
-Phase 1: Core (Auth, Launchpad, UI Library, DB Schema)
-Phase 2: Port Existing (KarmaDhara, SarvePratibha, KrayaVikrayam, Vidyalaya)
-Phase 3: New Modules (Finance, Inventory, Projects, Communication)
-Phase 4: Advanced (Asset Mgmt, E-Commerce, CMS, AI Integration)
-Phase 5: Polish (API docs, i18n, monitoring)
+# Install new module
+cd /home/eechie/odoo/community && /home/eechie/odoo/venv/bin/python odoo-bin -d sampoorna-sangathan -c /home/eechie/odoo/cfg/odoo.conf -i {module_name} --stop-after-init
 
-## Environment Variables Required
-- DATABASE_URL (Railway PostgreSQL)
-- NEXTAUTH_SECRET
-- NEXTAUTH_URL
-- ANTHROPIC_API_KEY (Claude AI)
-- ODOO_URL=http://localhost:8069
-- ODOO_DB=sampoorna-sangathan
-- ODOO_USER=admin@sampoornasangathan.com
+# Odoo Shell
+cd /home/eechie/odoo/community && /home/eechie/odoo/venv/bin/python odoo-bin shell -d sampoorna-sangathan -c /home/eechie/odoo/cfg/odoo.conf --no-http
 
-## Odoo Integration
-- Odoo 18 running on WSL2 at localhost:8069
-- Database: sampoorna-sangathan
-- Use XML-RPC/JSON-RPC API for data sync
-- Modules to install: Accounting, Inventory, Purchase, Manufacturing
-- Connector module bridges Odoo <-> Next.js via API
-
-## Claude Code IDE Session Template
+# Check module state
+psql -U eechie -d "sampoorna-sangathan" -c "SELECT name, state FROM ir_module_module WHERE name LIKE 'sampoorna%' OR name LIKE 'jana%' OR name LIKE 'sambandha%' OR name LIKE 'kosha%' OR name LIKE 'bhandar%' OR name LIKE 'pariyojana%' OR name LIKE 'sutradhara%'"
 ```
-Session: S{X}.{Y} - {Description}
-Branch: feat/S{X}.{Y}-{slug}
-Scope: {module-name}
-PRD Reference: Section {N}
-Acceptance Criteria:
-- [ ] Criterion 1
-- [ ] Criterion 2
-Dependencies: {list any}
-Rollback Plan: git checkout main
+
+---
+
+## Module Map (22 Total - Phase-wise)
+
+### Phase 1 (Core + 3 modules)
+| Module | Directory | Depends On | Description |
+|--------|-----------|------------|-------------|
+| sampoorna_sangathan_core | sampoorna_sangathan_core/ | base | Branding, dashboard, shared utilities |
+| jana_seva_hrms | jana_seva_hrms/ | hr, hr_holidays, hr_attendance, hr_expense | Extended HRMS |
+| sambandha_path_crm | sambandha_path_crm/ | crm, sale, sale_management | Extended CRM |
+| pariyojana_chakra | pariyojana_chakra/ | project, hr_timesheet | Project Management |
+
+### Phase 2 (Finance + Inventory)
+| Module | Directory | Depends On | Description |
+|--------|-----------|------------|-------------|
+| kosha_prabandhan | kosha_prabandhan/ | account, account_payment | Finance & Accounting |
+| bhandar_griha | bhandar_griha/ | stock, purchase | Inventory & Warehouse |
+| lekha_peethika | lekha_peethika/ | mail, calendar, contacts | Office Suite |
+
+### Phase 3 (Advanced)
+| Module | Directory | Depends On | Description |
+|--------|-----------|------------|-------------|
+| sutradhara_api | sutradhara_api/ | base | REST API endpoints |
+| vidya_kendra | vidya_kendra/ | website, website_slides | eLearning/Knowledge Base |
+| niti_rakshak | niti_rakshak/ | base | Compliance & Audit |
+
+---
+
+## Odoo Module Structure Template
 ```
+{module_name}/
+  __init__.py
+  __manifest__.py
+  models/
+    __init__.py
+    {model_name}.py
+  views/
+    {model_name}_views.xml
+    menu_views.xml
+  security/
+    ir.model.access.csv
+    security_groups.xml
+  data/
+    {module}_data.xml
+  static/
+    description/
+      icon.png
+    src/
+      js/
+      css/
+      xml/
+  wizard/
+    __init__.py
+  reports/
+```
+
+## __manifest__.py Template
+```python
+{
+    'name': 'Module Display Name',
+    'version': '17.0.1.0.0',
+    'category': 'SampoornaSangathan',
+    'summary': 'Brief description',
+    'description': 'Detailed description',
+    'author': 'SampoornaSangathan',
+    'website': 'https://sampoorna-sangathan.vercel.app',
+    'license': 'LGPL-3',
+    'depends': ['base'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/menu_views.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}
+```
+
+---
+
+## Parallel Session Rules
+- Each Claude Code session works on EXACTLY ONE module directory
+- Sessions must NOT touch files outside their assigned module
+- Core module (sampoorna_sangathan_core) must be installed FIRST
+- Check dependency modules are installed before testing
+- Use `--stop-after-init` flag to avoid port conflicts with running Odoo
+- Git: commit to feature branch `feat/{module_name}`, merge to main after QA
+
+## QA Checklist Per Module
+1. `__manifest__.py` has correct depends list
+2. `ir.model.access.csv` grants proper permissions
+3. Module installs without error: `-i {module} --stop-after-init`
+4. Module upgrades without error: `-u {module} --stop-after-init`
+5. Views load in browser at localhost:8069
+6. Menu items appear under SampoornaSangathan category
+7. No Python import errors in Odoo logs
+8. Security groups properly restrict access
