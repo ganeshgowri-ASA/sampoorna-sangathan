@@ -140,3 +140,110 @@ psql -U eechie -d "sampoorna-sangathan" -c "SELECT name, state FROM ir_module_mo
 6. Menu items appear under SampoornaSangathan category
 7. No Python import errors in Odoo logs
 8. Security groups properly restrict access
+
+
+---
+
+## DUPLICATE PREVENTION & SESSION TRACKING
+
+### How to Check if a Module is Already Built
+BEFORE starting any session, Claude Code MUST run:
+```bash
+# Check if module directory already exists
+ls -la ~/odoo/custom-addons/{module_name}/
+
+# Check if module is installed in Odoo DB
+psql -U eechie -d "sampoorna-sangathan" -c "SELECT name, state FROM ir_module_module WHERE name = '{module_name}'"
+
+# Check __manifest__.py exists
+cat ~/odoo/custom-addons/{module_name}/__manifest__.py 2>/dev/null
+```
+
+### Duplicate Prompt Rules
+- If directory EXISTS and has __manifest__.py -> DO NOT recreate, ask user what to enhance/fix
+- If directory EXISTS but module NOT installed -> fix and install
+- If directory DOES NOT exist -> create from scratch
+- NEVER overwrite existing working code without explicit user confirmation
+
+### Session Status File (auto-updated)
+Each Claude Code session MUST create/update a status file:
+```bash
+# At session START:
+echo "STARTED $(date) by Session-{N}" > ~/odoo/custom-addons/{module_name}/.session_status
+
+# At session END (success):
+echo "COMPLETED $(date) - Module installed successfully" > ~/odoo/custom-addons/{module_name}/.session_status
+
+# At session END (failure):
+echo "FAILED $(date) - Error: {description}" > ~/odoo/custom-addons/{module_name}/.session_status
+```
+
+### Quick Status Check (run anytime)
+```bash
+for dir in ~/odoo/custom-addons/*/; do
+  module=$(basename $dir)
+  if [ -f "$dir/.session_status" ]; then
+    echo "$module: $(cat $dir/.session_status)"
+  elif [ -f "$dir/__manifest__.py" ]; then
+    echo "$module: EXISTS (no status file)"
+  else
+    echo "$module: NOT STARTED"
+  fi
+done
+```
+
+---
+
+## INSPIRATION REPOS - Leverage Existing Code
+
+Claude Code MUST review these repos for patterns, models, and logic BEFORE building each module:
+
+### Core & Dashboard
+- `~/repos/antaryami-os/` or https://github.com/ganeshgowri-ASA/antaryami-os -> Enterprise Org AI OS architecture
+- `~/repos/karmadhara/` or https://github.com/ganeshgowri-ASA/karmadhara -> Enterprise Portal, Workflow Authorization (SAP Fiori style)
+- `~/repos/Karyadwar/` or https://github.com/ganeshgowri-ASA/Karyadwar -> Manufacturing Intranet Portal patterns
+
+### HRMS (jana_seva_hrms)
+- `~/repos/SarvePratibha/` or https://github.com/ganeshgowri-ASA/SarvePratibha -> Enterprise HRMS with HR, Payroll, Recruitment, Performance
+- Extract: Employee models, leave management logic, attendance patterns, payroll calculations
+
+### CRM (sambandha_path_crm)
+- `~/repos/Krayavikrayam/` or https://github.com/ganeshgowri-ASA/Krayavikrayam -> AI-native CRM/ERP SaaS with Pipeline, Chatbots
+- Extract: Lead scoring, pipeline stages, customer 360 view, email templates
+
+### Office Suite (lekha_peethika)
+- `~/repos/vidyalaya-office/` or https://github.com/ganeshgowri-ASA/vidyalaya-office -> AI-Native Office Suite (Docs, Sheets, Presentations)
+- `~/repos/sahaayam/` or https://github.com/ganeshgowri-ASA/sahaayam -> IT Self-Service Portal
+- Extract: Document models, collaboration patterns, template system
+
+### Access & Security
+- `~/repos/adhikarpath/` or https://github.com/ganeshgowri-ASA/adhikarpath -> Enterprise Access Management Portal
+- Extract: Role-based access patterns, permission models
+
+### Analytics Dashboards
+- `~/repos/PhotonIQ/` or https://github.com/ganeshgowri-ASA/PhotonIQ -> Quality Dashboard, Analytics patterns
+- `~/repos/SolarLabX/` or https://github.com/ganeshgowri-ASA/SolarLabX -> LIMS, QMS, Audit patterns
+- Extract: Dashboard widget patterns, chart configurations, KPI calculation logic
+
+### HOW TO USE Inspiration Repos
+```bash
+# Clone all inspiration repos locally (one-time setup)
+mkdir -p ~/repos && cd ~/repos
+git clone https://github.com/ganeshgowri-ASA/SarvePratibha.git
+git clone https://github.com/ganeshgowri-ASA/Krayavikrayam.git
+git clone https://github.com/ganeshgowri-ASA/vidyalaya-office.git
+git clone https://github.com/ganeshgowri-ASA/karmadhara.git
+git clone https://github.com/ganeshgowri-ASA/antaryami-os.git
+git clone https://github.com/ganeshgowri-ASA/adhikarpath.git
+git clone https://github.com/ganeshgowri-ASA/sahaayam.git
+git clone https://github.com/ganeshgowri-ASA/PhotonIQ.git
+git clone https://github.com/ganeshgowri-ASA/SolarLabX.git
+git clone https://github.com/ganeshgowri-ASA/Karyadwar.git
+```
+
+For each module session, Claude Code should:
+1. Read the mapped inspiration repo's models/schemas
+2. Extract field definitions, business logic, validation rules
+3. Translate from Next.js/Prisma/Express patterns to Odoo Python ORM
+4. Preserve feature completeness while adapting to Odoo conventions
+5. Add Odoo-specific features (workflows, security rules, reports) on top
