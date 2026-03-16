@@ -4,7 +4,7 @@
         <!-- Sequence for Dashboard Entries -->
         <record id="seq_bhandar_griha_dashboard" model="ir.sequence">
             <field name="name">Bhandar Griha Dashboard Sequence</field>
-            <field name="code">bhandar.griha.dashboard</field>
+            <field name="code">bhandar.griha.inventory.dashboard</field>
             <field name="prefix">BG-DASH-%(year)s-</field>
             <field name="padding">4</field>
             <field name="company_id" eval="False"/>

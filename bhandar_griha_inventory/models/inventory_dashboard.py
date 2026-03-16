@@ -2,7 +2,7 @@ from odoo import models, fields, api
 
 
 class BhandarGrihaDashboard(models.Model):
-    _name = 'bhandar.griha.dashboard'
+    _name = 'bhandar.griha.inventory.dashboard'
     _description = 'Bhandar Griha Inventory Dashboard'
     _inherit = ['sangathan.audit.mixin']
     _order = 'create_date desc'
@@ -11,7 +11,7 @@ class BhandarGrihaDashboard(models.Model):
         string='Dashboard Entry',
         required=True,
         default=lambda self: self.env['ir.sequence'].next_by_code(
-            'bhandar.griha.dashboard'
+            'bhandar.griha.inventory.dashboard'
         ) or 'New',
     )
     warehouse_id = fields.Many2one(
@@ -136,7 +136,7 @@ class BhandarGrihaDashboard(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'Inventory Dashboard',
-            'res_model': 'bhandar.griha.dashboard',
+            'res_model': 'bhandar.griha.inventory.dashboard',
             'view_mode': 'tree,form,graph,pivot',
             'target': 'current',
         }
