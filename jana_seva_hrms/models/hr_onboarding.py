@@ -53,8 +53,8 @@ class HrOnboardingTask(models.Model):
             self.write({'stage_id': done_stage.id, 'date_done': fields.Date.today()})
 
     @api.model
-    def _read_group_stage_ids(self, stages, domain, order=None):
-        return self.env['hr.onboarding.stage'].search([])
+    def _read_group_stage_ids(self, stages, domain, order):
+        return self.env['hr.onboarding.stage'].search([], order=order)
 
 
 class HrEmployee(models.Model):
