@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Bank Reconciliation Form View -->
+    <record id="view_bank_reconciliation_form" model="ir.ui.view">
+        <field name="name">kosha.bank.reconciliation.form</field>
+        <field name="model">kosha.bank.reconciliation</field>
+        <field name="arch" type="xml">
+            <form string="Bank Reconciliation">
+                <header>
+                    <button name="action_load_entries" string="Load Entries" type="object"
+                            class="btn-primary" invisible="state not in ('draft', 'in_progress')"/>
+                    <button name="action_reconcile" string="Mark Reconciled" type="object"
+                            class="btn-primary" invisible="state != 'in_progress'"
+                            groups="account.group_account_manager"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('done', 'cancelled')"/>
+                    <button name="action_draft" string="Reset to Draft" type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-check-circle" disabled="1">
+                            <div class="o_stat_info">
+                                <field name="matched_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Matched</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-exclamation-circle" disabled="1">
+                            <div class="o_stat_info">
+                                <field name="unmatched_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Unmatched</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="journal_id"/>
+                            <field name="date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="statement_balance"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="book_balance"/>
+                        </group>
+                        <group>
+                            <field name="difference"
+                                   decoration-danger="difference != 0"
+                                   decoration-success="difference == 0"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Reconciliation Lines">
+                            <field name="line_ids">
+                                <tree editable="bottom"
+                                      decoration-success="is_matched"
+                                      decoration-warning="not is_matched and statement_amount != 0"
+                                      decoration-muted="statement_amount == 0">
+                                    <field name="date"/>
+                                    <field name="ref"/>
+                                    <field name="partner_id"/>
+                                    <field name="move_line_id"/>
+                                    <field name="amount" sum="Book Total"/>
+                                    <field name="statement_amount" sum="Statement Total"/>
+                                    <field name="match_difference"/>
+                                    <field name="is_matched" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Reconciliation notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Bank Reconciliation Tree View -->
+    <record id="view_bank_reconciliation_tree" model="ir.ui.view">
+        <field name="name">kosha.bank.reconciliation.tree</field>
+        <field name="model">kosha.bank.reconciliation</field>
+        <field name="arch" type="xml">
+            <tree string="Bank Reconciliations"
+                  decoration-success="state == 'done'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="journal_id"/>
+                <field name="date"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="statement_balance"/>
+                <field name="book_balance"/>
+                <field name="difference"
+                       decoration-danger="difference != 0"
+                       decoration-success="difference == 0"/>
+                <field name="matched_count"/>
+                <field name="unmatched_count"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'in_progress'"
+                       decoration-danger="state == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Bank Reconciliation Search View -->
+    <record id="view_bank_reconciliation_search" model="ir.ui.view">
+        <field name="name">kosha.bank.reconciliation.search</field>
+        <field name="model">kosha.bank.reconciliation</field>
+        <field name="arch" type="xml">
+            <search string="Bank Reconciliation">
+                <field name="name"/>
+                <field name="journal_id"/>
+                <filter name="draft" string="Draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter name="in_progress" string="In Progress"
+                        domain="[('state', '=', 'in_progress')]"/>
+                <filter name="done" string="Reconciled"
+                        domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter name="has_difference" string="Has Difference"
+                        domain="[('difference', '!=', 0)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_journal" string="Journal"
+                            context="{'group_by': 'journal_id'}"/>
+                    <filter name="group_state" string="State"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Bank Reconciliation Action -->
+    <record id="action_bank_reconciliation" model="ir.actions.act_window">
+        <field name="name">Bank Reconciliation</field>
+        <field name="res_model">kosha.bank.reconciliation</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

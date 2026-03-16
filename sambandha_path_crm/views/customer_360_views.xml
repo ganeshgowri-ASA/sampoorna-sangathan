@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Customer 360 Action (must be before views that reference it) -->
+    <record id="action_customer_360" model="ir.actions.act_window">
+        <field name="name">Customer 360</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('customer_rank', '>', 0)]</field>
+        <field name="context">{'form_view_ref': 'sambandha_path_crm.view_partner_customer_360_form'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customers found
+            </p>
+            <p>Customer 360 view shows all interactions, leads, and orders for each customer in one place.</p>
+        </field>
+    </record>
+
+    <!-- Customer 360 View: Dedicated form showing all customer interactions -->
+    <record id="view_partner_customer_360_form" model="ir.ui.view">
+        <field name="name">res.partner.customer360.form.sambandha</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <form string="Customer 360 View" create="0" edit="0">
+                <sheet>
+                    <div class="oe_button_box" name="button_box_360">
+                        <button name="action_view_customer_journey" type="object"
+                                class="oe_stat_button" icon="fa-road">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Journey Map</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                        <field name="function" placeholder="Job Title"/>
+                    </div>
+                    <group>
+                        <group string="Contact Information">
+                            <field name="email"/>
+                            <field name="phone"/>
+                            <field name="mobile"/>
+                            <field name="city"/>
+                            <field name="country_id"/>
+                        </group>
+                        <group string="Customer Metrics">
+                            <field name="sp_customer_score"/>
+                            <field name="sp_lifetime_revenue"/>
+                            <field name="sp_last_interaction_date"/>
+                            <field name="sp_lead_count"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Leads &amp; Opportunities" name="leads">
+                            <field name="sp_lead_ids" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="stage_id"/>
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                    <field name="expected_revenue"/>
+                                    <field name="sp_lead_score"/>
+                                    <field name="sp_score_grade" widget="badge"
+                                           decoration-danger="sp_score_grade == 'cold'"
+                                           decoration-warning="sp_score_grade == 'warm'"
+                                           decoration-success="sp_score_grade == 'hot'"
+                                           decoration-info="sp_score_grade == 'on_fire'"/>
+                                    <field name="create_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Sales Orders" name="sales">
+                            <field name="sale_order_ids" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="date_order"/>
+                                    <field name="state"/>
+                                    <field name="amount_total"/>
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Inherit Partner Form: Add 360 View button -->
+    <record id="view_partner_form_inherit_360" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.sambandha.360</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_view_customer_360" type="object"
+                        class="oe_stat_button" icon="fa-street-view">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">360 View</span>
+                    </div>
+                </button>
+                <button name="%(action_customer_360)d" type="action"
+                        class="oe_stat_button" icon="fa-line-chart"
+                        invisible="not sp_lifetime_revenue">
+                    <field name="sp_lifetime_revenue" widget="statinfo" string="Revenue"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

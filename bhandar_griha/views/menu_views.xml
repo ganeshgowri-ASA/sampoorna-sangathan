@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-level menu under Inventory -->
+    <menuitem
+        id="menu_bhandar_griha_root"
+        name="Bhandar Griha"
+        parent="stock.menu_stock_root"
+        sequence="90"
+    />
+
+    <!-- Dashboard -->
+    <menuitem
+        id="menu_bhandar_griha_dashboard"
+        name="Warehouse Dashboard"
+        parent="menu_bhandar_griha_root"
+        action="action_bhandar_griha_dashboard"
+        sequence="10"
+    />
+
+    <!-- Multi-Warehouse Transfer -->
+    <menuitem
+        id="menu_bhandar_griha_transfer"
+        name="Multi-Warehouse Transfer"
+        parent="menu_bhandar_griha_root"
+        action="action_transfer_wizard"
+        sequence="20"
+    />
+
+    <!-- Stock Valuation Report -->
+    <menuitem
+        id="menu_bhandar_griha_valuation"
+        name="Stock Valuation Report"
+        parent="menu_bhandar_griha_root"
+        action="action_stock_valuation_report"
+        sequence="30"
+    />
+
+    <!-- Vendor Ratings -->
+    <menuitem
+        id="menu_bhandar_griha_vendor_rating"
+        name="Vendor Ratings"
+        parent="menu_bhandar_griha_root"
+        action="action_vendor_rating"
+        sequence="40"
+    />
+</odoo>

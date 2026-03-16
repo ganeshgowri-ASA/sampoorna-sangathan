@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Stock Warehouse Form View -->
+    <record id="view_warehouse_bhandar_extension" model="ir.ui.view">
+        <field name="name">stock.warehouse.bhandar.extension</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Bhandar Griha Analytics">
+                        <group>
+                            <group string="Capacity">
+                                <field name="capacity_limit"/>
+                                <field name="current_stock_count"/>
+                                <field name="utilization_rate" widget="progressbar"/>
+                            </group>
+                            <group string="Activity">
+                                <field name="movement_frequency"/>
+                                <field name="last_analytics_update"/>
+                            </group>
+                        </group>
+                        <div>
+                            <button name="action_refresh_analytics" type="object"
+                                    string="Refresh Analytics" class="btn-primary"
+                                    icon="fa-refresh"/>
+                        </div>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+</odoo>

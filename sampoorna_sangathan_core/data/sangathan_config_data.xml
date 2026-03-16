@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Reference Sequence -->
+        <record id="sequence_sangathan_ref" model="ir.sequence">
+            <field name="name">Sangathan Reference</field>
+            <field name="code">sangathan.ref.sequence</field>
+            <field name="prefix">SS-%(year)s-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Default Organisation Profile -->
+        <record id="default_org_profile" model="sangathan.org.profile">
+            <field name="name">SampoornaSangathan</field>
+            <field name="code">SS-DEFAULT</field>
+            <field name="tagline">Unified Organisation OS</field>
+            <field name="email">admin@sampoornasangathan.com</field>
+            <field name="website">https://sampoorna-sangathan.vercel.app</field>
+            <field name="primary_color">#714B67</field>
+            <field name="secondary_color">#017E84</field>
+            <field name="accent_color">#F06050</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- Default Tags -->
+        <record id="tag_urgent" model="sangathan.tag">
+            <field name="name">Urgent</field>
+            <field name="color">1</field>
+            <field name="module_scope">all</field>
+        </record>
+        <record id="tag_internal" model="sangathan.tag">
+            <field name="name">Internal</field>
+            <field name="color">4</field>
+            <field name="module_scope">all</field>
+        </record>
+        <record id="tag_external" model="sangathan.tag">
+            <field name="name">External</field>
+            <field name="color">10</field>
+            <field name="module_scope">all</field>
+        </record>
+
+    </data>
+</odoo>

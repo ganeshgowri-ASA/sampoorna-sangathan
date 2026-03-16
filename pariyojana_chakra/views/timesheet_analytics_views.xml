@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Timesheet Tree Extension -->
+    <record id="view_timesheet_tree_inherit" model="ir.ui.view">
+        <field name="name">account.analytic.line.tree.inherit.pariyojana</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='unit_amount']" position="before">
+                <field name="sprint_id" optional="show"/>
+                <field name="work_type" optional="show"/>
+                <field name="is_billable" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Timesheet Pivot - Burndown Analytics -->
+    <record id="view_timesheet_pivot_burndown" model="ir.ui.view">
+        <field name="name">account.analytic.line.pivot.burndown</field>
+        <field name="model">account.analytic.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Timesheet Burndown">
+                <field name="date" type="col" interval="day"/>
+                <field name="project_id" type="row"/>
+                <field name="unit_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Timesheet Graph - Burndown Chart -->
+    <record id="view_timesheet_graph_burndown" model="ir.ui.view">
+        <field name="name">account.analytic.line.graph.burndown</field>
+        <field name="model">account.analytic.line</field>
+        <field name="arch" type="xml">
+            <graph string="Burndown Chart" type="line">
+                <field name="date" interval="day"/>
+                <field name="unit_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Timesheet by Work Type -->
+    <record id="view_timesheet_graph_work_type" model="ir.ui.view">
+        <field name="name">account.analytic.line.graph.work_type</field>
+        <field name="model">account.analytic.line</field>
+        <field name="arch" type="xml">
+            <graph string="Hours by Work Type" type="pie">
+                <field name="work_type"/>
+                <field name="unit_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Timesheet Analytics Action - Burndown -->
+    <record id="action_timesheet_burndown" model="ir.actions.act_window">
+        <field name="name">Burndown Chart</field>
+        <field name="res_model">account.analytic.line</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_timesheet_graph_burndown')}),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_timesheet_pivot_burndown')})]"/>
+        <field name="domain">[('project_id', '!=', False)]</field>
+        <field name="context">{'search_default_group_by_project': 1}</field>
+    </record>
+
+    <!-- Timesheet Analytics Action - By Work Type -->
+    <record id="action_timesheet_by_work_type" model="ir.actions.act_window">
+        <field name="name">Hours by Work Type</field>
+        <field name="res_model">account.analytic.line</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_timesheet_graph_work_type')})]"/>
+        <field name="domain">[('project_id', '!=', False)]</field>
+    </record>
+</odoo>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Top-level menu -->
+    <menuitem id="menu_kosha_prabandhan_root"
+              name="Kosha Prabandhan"
+              web_icon="kosha_prabandhan,static/description/icon.png"
+              sequence="35"/>
+
+    <!-- Financial KPI Dashboard -->
+    <menuitem id="menu_financial_kpi"
+              name="Financial KPI Dashboard"
+              parent="menu_kosha_prabandhan_root"
+              action="action_financial_kpi"
+              sequence="10"/>
+
+    <!-- Budget Planning -->
+    <menuitem id="menu_budget_planning"
+              name="Budget Planning"
+              parent="menu_kosha_prabandhan_root"
+              sequence="20"/>
+
+    <menuitem id="menu_budget_plans"
+              name="Budget Plans"
+              parent="menu_budget_planning"
+              action="action_budget_plan"
+              sequence="10"/>
+
+    <!-- Expense Approvals -->
+    <menuitem id="menu_expense_approvals"
+              name="Expense Approvals"
+              parent="menu_kosha_prabandhan_root"
+              action="action_expense_approval"
+              sequence="30"/>
+
+    <!-- Invoice Analytics -->
+    <menuitem id="menu_invoice_analytics"
+              name="Invoice Analytics"
+              parent="menu_kosha_prabandhan_root"
+              action="action_invoice_analytics"
+              sequence="40"/>
+
+    <!-- Bank Reconciliation -->
+    <menuitem id="menu_bank_reconciliation"
+              name="Bank Reconciliation"
+              parent="menu_kosha_prabandhan_root"
+              action="action_bank_reconciliation"
+              sequence="45"/>
+
+    <!-- Tax Compliance -->
+    <menuitem id="menu_tax_compliance"
+              name="Tax Compliance"
+              parent="menu_kosha_prabandhan_root"
+              sequence="50"/>
+
+    <menuitem id="menu_gst_compliance"
+              name="GST Summary Reports"
+              parent="menu_tax_compliance"
+              action="action_gst_compliance"
+              sequence="10"/>
+
+    <menuitem id="menu_gst_filing"
+              name="GST Filing Status"
+              parent="menu_tax_compliance"
+              action="action_gst_filing"
+              sequence="20"/>
+
+    <!-- Cash Flow Forecasting -->
+    <menuitem id="menu_cash_flow"
+              name="Cash Flow Forecast"
+              parent="menu_kosha_prabandhan_root"
+              action="action_cash_flow_forecast"
+              sequence="60"/>
+
+</odoo>

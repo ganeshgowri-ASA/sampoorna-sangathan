@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Cash Flow Forecast Tree View -->
+    <record id="view_cash_flow_tree" model="ir.ui.view">
+        <field name="name">kosha.cash.flow.forecast.tree</field>
+        <field name="model">kosha.cash.flow.forecast</field>
+        <field name="arch" type="xml">
+            <tree string="Cash Flow Forecast" create="0" edit="0" delete="0">
+                <field name="forecast_date"/>
+                <field name="month"/>
+                <field name="expected_inflow" sum="Total Inflow"/>
+                <field name="expected_outflow" sum="Total Outflow"/>
+                <field name="net_cash_flow" sum="Net"
+                       decoration-success="net_cash_flow > 0"
+                       decoration-danger="net_cash_flow &lt; 0"/>
+                <field name="cumulative_cash_flow"
+                       decoration-success="cumulative_cash_flow > 0"
+                       decoration-danger="cumulative_cash_flow &lt; 0"/>
+                <field name="receivable_count"/>
+                <field name="payable_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Cash Flow Forecast Graph View -->
+    <record id="view_cash_flow_graph" model="ir.ui.view">
+        <field name="name">kosha.cash.flow.forecast.graph</field>
+        <field name="model">kosha.cash.flow.forecast</field>
+        <field name="arch" type="xml">
+            <graph string="Cash Flow Forecast" type="line">
+                <field name="forecast_date"/>
+                <field name="expected_inflow" type="measure"/>
+                <field name="expected_outflow" type="measure"/>
+                <field name="net_cash_flow" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Cash Flow Forecast Pivot View -->
+    <record id="view_cash_flow_pivot" model="ir.ui.view">
+        <field name="name">kosha.cash.flow.forecast.pivot</field>
+        <field name="model">kosha.cash.flow.forecast</field>
+        <field name="arch" type="xml">
+            <pivot string="Cash Flow Forecast">
+                <field name="month" type="row"/>
+                <field name="expected_inflow" type="measure"/>
+                <field name="expected_outflow" type="measure"/>
+                <field name="net_cash_flow" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Cash Flow Forecast Search View -->
+    <record id="view_cash_flow_search" model="ir.ui.view">
+        <field name="name">kosha.cash.flow.forecast.search</field>
+        <field name="model">kosha.cash.flow.forecast</field>
+        <field name="arch" type="xml">
+            <search string="Cash Flow Forecast">
+                <field name="month"/>
+                <field name="year"/>
+                <filter name="upcoming" string="Upcoming"
+                        domain="[('forecast_date', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="overdue" string="Overdue"
+                        domain="[('forecast_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_month" string="Month" context="{'group_by': 'month'}"/>
+                    <filter name="group_year" string="Year" context="{'group_by': 'year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Cash Flow Forecast Action -->
+    <record id="action_cash_flow_forecast" model="ir.actions.act_window">
+        <field name="name">Cash Flow Forecast</field>
+        <field name="res_model">kosha.cash.flow.forecast</field>
+        <field name="view_mode">graph,tree,pivot</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_onboarding_stage_user,hr.onboarding.stage.user,model_hr_onboarding_stage,hr.group_hr_user,1,1,1,0
+access_hr_onboarding_stage_manager,hr.onboarding.stage.manager,model_hr_onboarding_stage,hr.group_hr_manager,1,1,1,1
+access_hr_onboarding_task_user,hr.onboarding.task.user,model_hr_onboarding_task,hr.group_hr_user,1,1,1,0
+access_hr_onboarding_task_manager,hr.onboarding.task.manager,model_hr_onboarding_task,hr.group_hr_manager,1,1,1,1
+access_hr_document_type_user,hr.document.type.user,model_hr_document_type,hr.group_hr_user,1,0,0,0
+access_hr_document_type_manager,hr.document.type.manager,model_hr_document_type,hr.group_hr_manager,1,1,1,1
+access_hr_document_user,hr.document.user,model_hr_document,hr.group_hr_user,1,1,1,0
+access_hr_document_manager,hr.document.manager,model_hr_document,hr.group_hr_manager,1,1,1,1
+access_hr_leave_dashboard_user,hr.leave.dashboard.user,model_hr_leave_dashboard,hr.group_hr_user,1,0,0,0
+access_hr_leave_dashboard_manager,hr.leave.dashboard.manager,model_hr_leave_dashboard,hr.group_hr_manager,1,0,0,0
+access_hr_attendance_analytics_user,hr.attendance.analytics.user,model_hr_attendance_analytics,hr.group_hr_user,1,0,0,0
+access_hr_attendance_analytics_manager,hr.attendance.analytics.manager,model_hr_attendance_analytics,hr.group_hr_manager,1,0,0,0

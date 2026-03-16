@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lead Scoring Rule: Tree View -->
+    <record id="view_lead_scoring_rule_tree" model="ir.ui.view">
+        <field name="name">sambandha.lead.scoring.rule.tree</field>
+        <field name="model">sambandha.lead.scoring.rule</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="criteria_type"/>
+                <field name="score_points"/>
+                <field name="auto_assign"/>
+                <field name="active" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Lead Scoring Rule: Form View -->
+    <record id="view_lead_scoring_rule_form" model="ir.ui.view">
+        <field name="name">sambandha.lead.scoring.rule.form</field>
+        <field name="model">sambandha.lead.scoring.rule</field>
+        <field name="arch" type="xml">
+            <form string="Lead Scoring Rule">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Rule Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Criteria">
+                            <field name="sequence"/>
+                            <field name="active"/>
+                            <field name="criteria_type"/>
+                            <field name="field_name" invisible="criteria_type != 'field_value'"/>
+                            <field name="field_value" invisible="criteria_type not in ('field_value', 'email_domain')"/>
+                            <field name="country_ids" widget="many2many_tags" invisible="criteria_type != 'country'"/>
+                            <field name="source_id" invisible="criteria_type != 'source'"/>
+                            <field name="tag_ids" widget="many2many_tags" invisible="criteria_type != 'tag'"/>
+                            <field name="revenue_min" invisible="criteria_type != 'revenue'"/>
+                            <field name="revenue_max" invisible="criteria_type != 'revenue'"/>
+                        </group>
+                        <group string="Score &amp; Assignment">
+                            <field name="score_points"/>
+                            <field name="auto_assign"/>
+                            <field name="assign_user_id" invisible="not auto_assign"/>
+                            <field name="assign_team_id" invisible="not auto_assign"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Lead Auto-Assignment Rule: Tree View -->
+    <record id="view_lead_auto_assign_rule_tree" model="ir.ui.view">
+        <field name="name">sambandha.lead.auto.assign.rule.tree</field>
+        <field name="model">sambandha.lead.auto.assign.rule</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="min_score"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="team_id"/>
+                <field name="active" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Lead Auto-Assignment Rule: Form View -->
+    <record id="view_lead_auto_assign_rule_form" model="ir.ui.view">
+        <field name="name">sambandha.lead.auto.assign.rule.form</field>
+        <field name="model">sambandha.lead.auto.assign.rule</field>
+        <field name="arch" type="xml">
+            <form string="Auto-Assignment Rule">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Rule Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Conditions">
+                            <field name="sequence"/>
+                            <field name="active"/>
+                            <field name="min_score"/>
+                            <field name="source_id"/>
+                            <field name="country_ids" widget="many2many_tags"/>
+                            <field name="tag_ids" widget="many2many_tags"/>
+                        </group>
+                        <group string="Assign To">
+                            <field name="user_id"/>
+                            <field name="team_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_lead_scoring_rules" model="ir.actions.act_window">
+        <field name="name">Scoring Rules</field>
+        <field name="res_model">sambandha.lead.scoring.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first lead scoring rule
+            </p>
+            <p>Define rules to automatically score leads based on criteria like revenue, source, country, and more.</p>
+        </field>
+    </record>
+
+    <record id="action_lead_auto_assign_rules" model="ir.actions.act_window">
+        <field name="name">Auto-Assignment Rules</field>
+        <field name="res_model">sambandha.lead.auto.assign.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first auto-assignment rule
+            </p>
+            <p>Automatically assign leads to salespeople based on score, source, country, and tags.</p>
+        </field>
+    </record>
+</odoo>

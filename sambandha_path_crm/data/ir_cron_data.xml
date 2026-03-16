@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Cron: Compute Lead Scores (daily) -->
+        <record id="ir_cron_compute_lead_scores" model="ir.cron">
+            <field name="name">Sambandha Path: Compute Lead Scores</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_compute_lead_scores()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Cron: Auto-Assign Leads (every 2 hours) -->
+        <record id="ir_cron_auto_assign_leads" model="ir.cron">
+            <field name="name">Sambandha Path: Auto-Assign Leads</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_auto_assign_leads()</field>
+            <field name="interval_number">2</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Cron: Follow-up Reminders (daily) -->
+        <record id="ir_cron_followup_reminders" model="ir.cron">
+            <field name="name">Sambandha Path: Follow-up Reminders</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_followup_reminders()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+        <!-- Cron: Execute Automated Follow-up Rules (every 4 hours) -->
+        <record id="ir_cron_followup_rules" model="ir.cron">
+            <field name="name">Sambandha Path: Execute Follow-up Rules</field>
+            <field name="model_id" ref="model_sambandha_followup_rule"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_execute_followup_rules()</field>
+            <field name="interval_number">4</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

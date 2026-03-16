@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Stock Valuation Tree View -->
+    <record id="view_stock_valuation_tree" model="ir.ui.view">
+        <field name="name">bhandar.griha.stock.valuation.tree</field>
+        <field name="model">bhandar.griha.stock.valuation</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false">
+                <field name="product_id"/>
+                <field name="product_categ_id"/>
+                <field name="warehouse_id"/>
+                <field name="quantity" sum="Total Quantity"/>
+                <field name="standard_price"/>
+                <field name="total_value" sum="Total Value"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Stock Valuation Search View -->
+    <record id="view_stock_valuation_search" model="ir.ui.view">
+        <field name="name">bhandar.griha.stock.valuation.search</field>
+        <field name="model">bhandar.griha.stock.valuation</field>
+        <field name="arch" type="xml">
+            <search string="Stock Valuation">
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <field name="product_categ_id"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_warehouse" string="Warehouse"
+                        context="{'group_by': 'warehouse_id'}"/>
+                    <filter name="group_category" string="Category"
+                        context="{'group_by': 'product_categ_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Stock Valuation Action -->
+    <record id="action_stock_valuation_report" model="ir.actions.act_window">
+        <field name="name">Stock Valuation</field>
+        <field name="res_model">bhandar.griha.stock.valuation</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_stock_valuation_search"/>
+    </record>
+</odoo>

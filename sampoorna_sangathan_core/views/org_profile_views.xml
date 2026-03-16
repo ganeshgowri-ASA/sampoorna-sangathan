@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_org_profile_form" model="ir.ui.view">
+        <field name="name">sangathan.org.profile.form</field>
+        <field name="model">sangathan.org.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" type="object" string="Activate"
+                            invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_suspend" type="object" string="Suspend"
+                            invisible="state != 'active'" class="btn-secondary"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft"
+                            invisible="state == 'draft'" class="btn-secondary"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,active"/>
+                </header>
+                <sheet>
+                    <field name="logo" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Organisation Name"/></h1>
+                        <field name="tagline" placeholder="Tagline"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="company_id"/>
+                            <field name="email"/>
+                            <field name="phone"/>
+                        </group>
+                        <group>
+                            <field name="website" widget="url"/>
+                            <field name="primary_color" widget="color"/>
+                            <field name="secondary_color" widget="color"/>
+                            <field name="accent_color" widget="color"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Address">
+                            <field name="address"/>
+                        </page>
+                        <page string="Modules">
+                            <group>
+                                <field name="module_hrms"/>
+                                <field name="module_crm"/>
+                                <field name="module_finance"/>
+                                <field name="module_inventory"/>
+                                <field name="module_projects"/>
+                                <field name="module_api"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                    <field name="activity_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_org_profile_tree" model="ir.ui.view">
+        <field name="name">sangathan.org.profile.tree</field>
+        <field name="model">sangathan.org.profile</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="company_id"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-info="state == 'draft'"
+                       decoration-danger="state == 'suspended'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_org_profile" model="ir.actions.act_window">
+        <field name="name">Organisation Profile</field>
+        <field name="res_model">sangathan.org.profile</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

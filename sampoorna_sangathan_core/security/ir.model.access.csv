@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_org_profile_user,sangathan.org.profile.user,model_sangathan_org_profile,group_sangathan_user,1,0,0,0
+access_org_profile_manager,sangathan.org.profile.manager,model_sangathan_org_profile,group_sangathan_manager,1,1,1,0
+access_org_profile_admin,sangathan.org.profile.admin,model_sangathan_org_profile,group_sangathan_admin,1,1,1,1
+access_tag_user,sangathan.tag.user,model_sangathan_tag,group_sangathan_user,1,0,0,0
+access_tag_manager,sangathan.tag.manager,model_sangathan_tag,group_sangathan_manager,1,1,1,0
+access_tag_admin,sangathan.tag.admin,model_sangathan_tag,group_sangathan_admin,1,1,1,1

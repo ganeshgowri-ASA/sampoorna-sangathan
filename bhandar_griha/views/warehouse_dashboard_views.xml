@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard Tree View -->
+    <record id="view_bhandar_griha_dashboard_tree" model="ir.ui.view">
+        <field name="name">bhandar.griha.dashboard.tree</field>
+        <field name="model">bhandar.griha.dashboard</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="is_below_reorder == True">
+                <field name="warehouse_id"/>
+                <field name="product_id"/>
+                <field name="current_stock"/>
+                <field name="reserved_qty"/>
+                <field name="available_qty"/>
+                <field name="reorder_level"/>
+                <field name="reorder_qty"/>
+                <field name="is_below_reorder" column_invisible="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Dashboard Form View -->
+    <record id="view_bhandar_griha_dashboard_form" model="ir.ui.view">
+        <field name="name">bhandar.griha.dashboard.form</field>
+        <field name="model">bhandar.griha.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Warehouse Dashboard">
+                <sheet>
+                    <group>
+                        <group string="Location">
+                            <field name="warehouse_id"/>
+                            <field name="product_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Stock Levels">
+                            <field name="current_stock"/>
+                            <field name="reserved_qty"/>
+                            <field name="available_qty"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Reorder Settings">
+                            <field name="reorder_level"/>
+                            <field name="reorder_qty"/>
+                            <field name="is_below_reorder"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Dashboard Search View -->
+    <record id="view_bhandar_griha_dashboard_search" model="ir.ui.view">
+        <field name="name">bhandar.griha.dashboard.search</field>
+        <field name="model">bhandar.griha.dashboard</field>
+        <field name="arch" type="xml">
+            <search string="Warehouse Dashboard">
+                <field name="warehouse_id"/>
+                <field name="product_id"/>
+                <filter name="has_reorder_level" string="With Reorder Level"
+                    domain="[('reorder_level', '>', 0)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_warehouse" string="Warehouse"
+                        context="{'group_by': 'warehouse_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Dashboard Action -->
+    <record id="action_bhandar_griha_dashboard" model="ir.actions.act_window">
+        <field name="name">Warehouse Dashboard</field>
+        <field name="res_model">bhandar.griha.dashboard</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_bhandar_griha_dashboard_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Set up your warehouse dashboard
+            </p>
+            <p>
+                Add products with reorder levels to monitor stock across warehouses.
+            </p>
+        </field>
+    </record>
+</odoo>

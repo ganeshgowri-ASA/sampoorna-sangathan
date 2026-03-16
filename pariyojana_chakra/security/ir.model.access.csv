@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sprint_user,project.sprint.user,model_project_sprint,group_pariyojana_user,1,1,1,0
+access_sprint_manager,project.sprint.manager,model_project_sprint,group_pariyojana_manager,1,1,1,1
+access_sprint_stage_user,project.sprint.stage.user,model_project_sprint_stage,group_pariyojana_user,1,0,0,0
+access_sprint_stage_manager,project.sprint.stage.manager,model_project_sprint_stage,group_pariyojana_manager,1,1,1,1
+access_deliverable_user,project.deliverable.user,model_project_deliverable,group_pariyojana_user,1,1,1,0
+access_deliverable_manager,project.deliverable.manager,model_project_deliverable,group_pariyojana_manager,1,1,1,1
+access_allocation_user,project.resource.allocation.user,model_project_resource_allocation,group_pariyojana_user,1,1,1,0
+access_allocation_manager,project.resource.allocation.manager,model_project_resource_allocation,group_pariyojana_manager,1,1,1,1
+access_template_user,project.template.user,model_project_template,group_pariyojana_user,1,0,0,0
+access_template_manager,project.template.manager,model_project_template,group_pariyojana_manager,1,1,1,1
+access_template_task_user,project.template.task.user,model_project_template_task,group_pariyojana_user,1,0,0,0
+access_template_task_manager,project.template.task.manager,model_project_template_task,group_pariyojana_manager,1,1,1,1

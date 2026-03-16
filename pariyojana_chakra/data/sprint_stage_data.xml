@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="sprint_stage_backlog" model="project.sprint.stage">
+        <field name="name">Backlog</field>
+        <field name="sequence">1</field>
+    </record>
+    <record id="sprint_stage_planning" model="project.sprint.stage">
+        <field name="name">Planning</field>
+        <field name="sequence">2</field>
+    </record>
+    <record id="sprint_stage_active" model="project.sprint.stage">
+        <field name="name">Active</field>
+        <field name="sequence">3</field>
+    </record>
+    <record id="sprint_stage_review" model="project.sprint.stage">
+        <field name="name">Review</field>
+        <field name="sequence">4</field>
+    </record>
+    <record id="sprint_stage_done" model="project.sprint.stage">
+        <field name="name">Done</field>
+        <field name="sequence">5</field>
+        <field name="fold" eval="True"/>
+    </record>
+</odoo>

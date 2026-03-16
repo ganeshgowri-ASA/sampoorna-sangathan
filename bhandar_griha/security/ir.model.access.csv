@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dashboard_user,bhandar.griha.dashboard.user,model_bhandar_griha_dashboard,stock.group_stock_user,1,1,1,0
+access_dashboard_manager,bhandar.griha.dashboard.manager,model_bhandar_griha_dashboard,stock.group_stock_manager,1,1,1,1
+access_vendor_rating_user,bhandar.griha.vendor.rating.user,model_bhandar_griha_vendor_rating,stock.group_stock_user,1,1,1,0
+access_vendor_rating_manager,bhandar.griha.vendor.rating.manager,model_bhandar_griha_vendor_rating,stock.group_stock_manager,1,1,1,1
+access_valuation_user,bhandar.griha.stock.valuation.user,model_bhandar_griha_stock_valuation,stock.group_stock_user,1,0,0,0
+access_valuation_manager,bhandar.griha.stock.valuation.manager,model_bhandar_griha_stock_valuation,stock.group_stock_manager,1,0,0,0
+access_transfer_wizard_user,bhandar.griha.transfer.wizard.user,model_bhandar_griha_transfer_wizard,stock.group_stock_user,1,1,1,1
+access_transfer_wizard_line_user,bhandar.griha.transfer.wizard.line.user,model_bhandar_griha_transfer_wizard_line,stock.group_stock_user,1,1,1,1

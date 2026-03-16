@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Budget Plan Form View -->
+    <record id="view_budget_plan_form" model="ir.ui.view">
+        <field name="name">kosha.budget.plan.form</field>
+        <field name="model">kosha.budget.plan</field>
+        <field name="arch" type="xml">
+            <form string="Budget Plan">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_revise" string="Revise" type="object"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_done" string="Done" type="object"
+                            class="btn-primary" invisible="state not in ('confirmed', 'revised')"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('done', 'cancelled')"/>
+                    <button name="action_draft" string="Reset to Draft" type="object"
+                            invisible="state not in ('cancelled', 'revised')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Budget Name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="responsible_id"/>
+                        </group>
+                        <group>
+                            <field name="total_planned"/>
+                            <field name="total_actual"/>
+                            <field name="total_variance" decoration-success="total_variance >= 0" decoration-danger="total_variance &lt; 0"/>
+                            <field name="variance_pct" widget="progressbar"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Budget Lines">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="account_id"/>
+                                    <field name="analytic_account_id" optional="show"/>
+                                    <field name="planned_amount" sum="Total Planned"/>
+                                    <field name="actual_amount" sum="Total Actual"/>
+                                    <field name="variance" sum="Total Variance"
+                                           decoration-success="variance >= 0"
+                                           decoration-danger="variance &lt; 0"/>
+                                    <field name="variance_pct"/>
+                                    <field name="notes" optional="hide"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Budget Plan Tree View -->
+    <record id="view_budget_plan_tree" model="ir.ui.view">
+        <field name="name">kosha.budget.plan.tree</field>
+        <field name="model">kosha.budget.plan</field>
+        <field name="arch" type="xml">
+            <tree string="Budget Plans" decoration-muted="state == 'cancelled'" decoration-info="state == 'draft'">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="responsible_id"/>
+                <field name="total_planned" sum="Total Planned"/>
+                <field name="total_actual" sum="Total Actual"/>
+                <field name="total_variance" sum="Variance"
+                       decoration-success="total_variance >= 0"
+                       decoration-danger="total_variance &lt; 0"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'revised'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Budget Plan Search View -->
+    <record id="view_budget_plan_search" model="ir.ui.view">
+        <field name="name">kosha.budget.plan.search</field>
+        <field name="model">kosha.budget.plan</field>
+        <field name="arch" type="xml">
+            <search string="Budget Plans">
+                <field name="name"/>
+                <field name="responsible_id"/>
+                <filter name="active" string="Active" domain="[('state', 'not in', ('cancelled', 'done'))]"/>
+                <filter name="over_budget" string="Over Budget" domain="[('total_variance', '&lt;', 0)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_responsible" string="Responsible" context="{'group_by': 'responsible_id'}"/>
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Budget Plan Action -->
+    <record id="action_budget_plan" model="ir.actions.act_window">
+        <field name="name">Budget Plans</field>
+        <field name="res_model">kosha.budget.plan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+</odoo>

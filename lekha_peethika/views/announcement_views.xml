@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="lekha_announcement_list" model="ir.ui.view">
+        <field name="name">lekha.announcement.list</field>
+        <field name="model">lekha.announcement</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="is_pinned">
+                <field name="name"/>
+                <field name="author_id" widget="many2one_avatar_user"/>
+                <field name="publish_date"/>
+                <field name="priority" widget="priority"/>
+                <field name="target_audience"/>
+                <field name="is_pinned"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'published'" decoration-muted="state == 'expired'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="lekha_announcement_form" model="ir.ui.view">
+        <field name="name">lekha.announcement.form</field>
+        <field name="model">lekha.announcement</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_publish" string="Publish" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_expire" string="Expire" type="object" invisible="state != 'published'"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,published"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Announcement Title"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="author_id" widget="many2one_avatar_user"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="is_pinned"/>
+                        </group>
+                        <group>
+                            <field name="publish_date"/>
+                            <field name="expiry_date"/>
+                            <field name="target_audience"/>
+                            <field name="department_id" invisible="target_audience != 'department'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Content" name="content">
+                            <field name="summary" placeholder="Brief summary..."/>
+                            <field name="content" placeholder="Full announcement content..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="lekha_announcement_kanban" model="ir.ui.view">
+        <field name="name">lekha.announcement.kanban</field>
+        <field name="model">lekha.announcement</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="d-flex justify-content-between">
+                                    <strong><field name="name"/></strong>
+                                    <field name="priority" widget="priority"/>
+                                </div>
+                                <div class="text-muted" t-if="record.summary.raw_value">
+                                    <field name="summary"/>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <field name="author_id" widget="many2one_avatar_user"/>
+                                    <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'published': 'success', 'expired': 'secondary'}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="lekha_announcement_search" model="ir.ui.view">
+        <field name="name">lekha.announcement.search</field>
+        <field name="model">lekha.announcement</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="author_id"/>
+                <separator/>
+                <filter string="Published" name="published" domain="[('state', '=', 'published')]"/>
+                <filter string="Pinned" name="pinned" domain="[('is_pinned', '=', True)]"/>
+                <filter string="Active" name="active" domain="[('is_active', '=', True)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Priority" name="group_priority" context="{'group_by': 'priority'}"/>
+                    <filter string="Target" name="group_target" context="{'group_by': 'target_audience'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lekha_announcement" model="ir.actions.act_window">
+        <field name="name">Announcements</field>
+        <field name="res_model">lekha.announcement</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="lekha_announcement_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Post your first announcement</p>
+            <p>Share news and updates with your team.</p>
+        </field>
+    </record>
+</odoo>

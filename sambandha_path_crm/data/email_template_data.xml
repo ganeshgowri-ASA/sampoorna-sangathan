@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Email Template Library -->
+        <record id="template_initial_outreach" model="sambandha.email.template">
+            <field name="name">Initial Outreach</field>
+            <field name="sequence">10</field>
+            <field name="category">introduction</field>
+            <field name="subject">Introduction - How We Can Help</field>
+            <field name="body_html"><![CDATA[
+                <p>Dear ${object.contact_name or 'there'},</p>
+                <p>Thank you for your interest. I wanted to reach out and introduce myself as your point of contact.</p>
+                <p>I'd love to learn more about your needs and explore how we can help. Would you be available for a brief call this week?</p>
+                <p>Best regards</p>
+            ]]></field>
+        </record>
+
+        <record id="template_followup_1" model="sambandha.email.template">
+            <field name="name">First Follow-up</field>
+            <field name="sequence">20</field>
+            <field name="category">followup</field>
+            <field name="subject">Following Up on Our Conversation</field>
+            <field name="body_html"><![CDATA[
+                <p>Hi ${object.contact_name or 'there'},</p>
+                <p>I wanted to follow up on our previous conversation. Have you had a chance to review the information I shared?</p>
+                <p>I'm happy to answer any questions or schedule a deeper dive into the solution.</p>
+                <p>Looking forward to hearing from you.</p>
+            ]]></field>
+        </record>
+
+        <record id="template_proposal" model="sambandha.email.template">
+            <field name="name">Proposal Delivery</field>
+            <field name="sequence">30</field>
+            <field name="category">proposal</field>
+            <field name="subject">Your Customized Proposal</field>
+            <field name="body_html"><![CDATA[
+                <p>Dear ${object.contact_name or 'there'},</p>
+                <p>Please find attached our customized proposal based on our discussions.</p>
+                <p>Key highlights:</p>
+                <ul>
+                    <li>Tailored solution addressing your specific needs</li>
+                    <li>Competitive pricing with flexible payment terms</li>
+                    <li>Dedicated support and implementation plan</li>
+                </ul>
+                <p>I'd welcome the opportunity to walk you through the details at your convenience.</p>
+            ]]></field>
+        </record>
+
+        <record id="template_reengagement" model="sambandha.email.template">
+            <field name="name">Re-engagement</field>
+            <field name="sequence">50</field>
+            <field name="category">reengagement</field>
+            <field name="subject">We Haven't Forgotten About You</field>
+            <field name="body_html"><![CDATA[
+                <p>Hi ${object.contact_name or 'there'},</p>
+                <p>It's been a while since we last connected. I wanted to check in and see if your needs have changed or if there's anything new we can help with.</p>
+                <p>We've made some exciting updates recently that might be of interest to you.</p>
+                <p>Would you be open to a quick catch-up?</p>
+            ]]></field>
+        </record>
+
+        <record id="template_closing" model="sambandha.email.template">
+            <field name="name">Deal Closing</field>
+            <field name="sequence">40</field>
+            <field name="category">closing</field>
+            <field name="subject">Ready to Move Forward?</field>
+            <field name="body_html"><![CDATA[
+                <p>Dear ${object.contact_name or 'there'},</p>
+                <p>I hope you've had a chance to review everything. We're excited about the opportunity to work together.</p>
+                <p>To help us get started, could you let me know:</p>
+                <ul>
+                    <li>Any remaining questions or concerns?</li>
+                    <li>Your preferred timeline for getting started?</li>
+                </ul>
+                <p>I'm here to make the process as smooth as possible.</p>
+            ]]></field>
+        </record>
+    </data>
+</odoo>

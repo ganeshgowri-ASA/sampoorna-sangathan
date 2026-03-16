@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="sutradhara_api_menu_root"
+              name="Sutradhara API"
+              sequence="50"
+              web_icon="sutradhara_api,static/description/icon.png"
+              groups="base.group_system"/>
+
+    <!-- Configuration submenu -->
+    <menuitem id="sutradhara_api_menu_config"
+              name="Configuration"
+              parent="sutradhara_api_menu_root"
+              sequence="10"/>
+
+    <menuitem id="sutradhara_api_menu_keys"
+              name="API Keys"
+              parent="sutradhara_api_menu_config"
+              action="sutradhara_api_key_action"
+              sequence="10"/>
+
+    <menuitem id="sutradhara_api_menu_webhooks"
+              name="Webhooks"
+              parent="sutradhara_api_menu_config"
+              action="sutradhara_webhook_action"
+              sequence="20"/>
+
+    <!-- Monitoring submenu -->
+    <menuitem id="sutradhara_api_menu_monitoring"
+              name="Monitoring"
+              parent="sutradhara_api_menu_root"
+              sequence="20"/>
+
+    <menuitem id="sutradhara_api_menu_logs"
+              name="API Logs"
+              parent="sutradhara_api_menu_monitoring"
+              action="sutradhara_api_log_action"
+              sequence="10"/>
+</odoo>

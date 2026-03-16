@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_sangathan" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.sangathan</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="SampoornaSangathan" string="SampoornaSangathan">
+                    <block title="General Settings">
+                        <setting string="Organisation Name"
+                                 help="Set the organisation display name">
+                            <field name="sangathan_org_name"/>
+                        </setting>
+                        <setting string="Primary Brand Color"
+                                 help="Primary color for branding">
+                            <field name="sangathan_primary_color"/>
+                        </setting>
+                        <setting string="Default Language"
+                                 help="Default language for the platform">
+                            <field name="sangathan_default_lang"/>
+                        </setting>
+                    </block>
+                    <block title="Features">
+                        <setting string="API Gateway"
+                                 help="Enable the API Gateway module">
+                            <field name="sangathan_enable_api"/>
+                        </setting>
+                        <setting string="Audit Trail"
+                                 help="Enable audit trail across all modules">
+                            <field name="sangathan_enable_audit_trail"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Settings Action -->
+    <record id="action_sangathan_config" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'sampoorna_sangathan_core'}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Expense Approval Form View -->
+    <record id="view_expense_approval_form" model="ir.ui.view">
+        <field name="name">kosha.expense.approval.form</field>
+        <field name="model">kosha.expense.approval</field>
+        <field name="arch" type="xml">
+            <form string="Expense Approval">
+                <header>
+                    <button name="action_submit" string="Submit" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="btn-primary" invisible="state != 'submitted'"
+                            groups="account.group_account_manager"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            invisible="state not in ('submitted', 'approved')"
+                            groups="account.group_account_manager"/>
+                    <button name="action_pay" string="Mark as Paid" type="object"
+                            class="btn-primary" invisible="state != 'approved'"
+                            groups="account.group_account_manager"/>
+                    <button name="action_draft" string="Reset to Draft" type="object"
+                            invisible="state not in ('rejected',)"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Expense Title"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="employee_id"/>
+                            <field name="department"/>
+                            <field name="category"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="currency_id"/>
+                            <field name="approver_id" readonly="1"/>
+                            <field name="approved_date" readonly="1"/>
+                            <field name="stage_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Describe the expense..."/>
+                        </page>
+                        <page string="Receipts &amp; OCR">
+                            <group>
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="ocr_status" widget="badge"
+                                           decoration-success="ocr_status == 'done'"
+                                           decoration-warning="ocr_status == 'pending'"
+                                           decoration-danger="ocr_status == 'failed'"/>
+                                    <button name="action_ocr_scan" string="Scan Receipt (OCR)"
+                                            type="object" class="btn-secondary"
+                                            icon="fa-camera"
+                                            invisible="not attachment_ids"/>
+                                </group>
+                            </group>
+                            <field name="ocr_raw_text" invisible="ocr_status not in ('done', 'failed')"
+                                   readonly="1" string="OCR Result"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Expense Approval Tree View -->
+    <record id="view_expense_approval_tree" model="ir.ui.view">
+        <field name="name">kosha.expense.approval.tree</field>
+        <field name="model">kosha.expense.approval</field>
+        <field name="arch" type="xml">
+            <tree string="Expense Approvals"
+                  decoration-muted="state == 'rejected'"
+                  decoration-success="state == 'paid'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="employee_id"/>
+                <field name="category"/>
+                <field name="amount" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="approver_id"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'paid'"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'submitted'"
+                       decoration-primary="state == 'approved'"
+                       decoration-danger="state == 'rejected'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Expense Approval Kanban View -->
+    <record id="view_expense_approval_kanban" model="ir.ui.view">
+        <field name="name">kosha.expense.approval.kanban</field>
+        <field name="model">kosha.expense.approval</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="amount"/>
+                <field name="employee_id"/>
+                <field name="state"/>
+                <field name="stage_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <strong><field name="name"/></strong>
+                                <div><field name="employee_id"/></div>
+                                <div class="text-primary fw-bold">
+                                    <field name="amount" widget="monetary"/>
+                                </div>
+                                <div><field name="state" widget="badge"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Expense Approval Search View -->
+    <record id="view_expense_approval_search" model="ir.ui.view">
+        <field name="name">kosha.expense.approval.search</field>
+        <field name="model">kosha.expense.approval</field>
+        <field name="arch" type="xml">
+            <search string="Expense Approvals">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="category"/>
+                <filter name="my_expenses" string="My Expenses"
+                        domain="[('employee_id', '=', uid)]"/>
+                <filter name="pending" string="Pending Approval"
+                        domain="[('state', '=', 'submitted')]"/>
+                <separator/>
+                <filter name="this_month" string="This Month"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                    <filter name="group_category" string="Category" context="{'group_by': 'category'}"/>
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Expense Approval Action -->
+    <record id="action_expense_approval" model="ir.actions.act_window">
+        <field name="name">Expense Approvals</field>
+        <field name="res_model">kosha.expense.approval</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+</odoo>

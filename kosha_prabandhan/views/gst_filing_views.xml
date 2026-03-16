@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- GST Filing Form View -->
+    <record id="view_gst_filing_form" model="ir.ui.view">
+        <field name="name">kosha.gst.filing.form</field>
+        <field name="model">kosha.gst.filing</field>
+        <field name="arch" type="xml">
+            <form string="GST Filing">
+                <header>
+                    <button name="action_mark_pending" string="Mark Pending" type="object"
+                            class="btn-primary" invisible="state != 'not_due'"/>
+                    <button name="action_mark_filed" string="Mark as Filed" type="object"
+                            class="btn-primary" invisible="state in ('filed', 'late')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="not_due,pending,filed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="period" placeholder="YYYY-MM"/>
+                            <span> - </span>
+                            <field name="return_type"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Filing Details">
+                            <field name="due_date"/>
+                            <field name="filing_date"/>
+                            <field name="arn_number"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Tax Summary">
+                            <field name="invoice_count"/>
+                            <field name="taxable_amount"/>
+                            <field name="cgst_amount"/>
+                            <field name="sgst_amount"/>
+                            <field name="igst_amount"/>
+                            <field name="total_tax"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Additional notes..."/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- GST Filing Tree View -->
+    <record id="view_gst_filing_tree" model="ir.ui.view">
+        <field name="name">kosha.gst.filing.tree</field>
+        <field name="model">kosha.gst.filing</field>
+        <field name="arch" type="xml">
+            <tree string="GST Filings"
+                  decoration-danger="state == 'overdue'"
+                  decoration-warning="state == 'late'"
+                  decoration-success="state == 'filed'"
+                  decoration-muted="state == 'not_due'">
+                <field name="period"/>
+                <field name="return_type"/>
+                <field name="due_date"/>
+                <field name="filing_date"/>
+                <field name="arn_number"/>
+                <field name="taxable_amount" sum="Total Taxable"/>
+                <field name="total_tax" sum="Total Tax"/>
+                <field name="invoice_count" sum="Invoices"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'filed'"
+                       decoration-info="state == 'not_due'"
+                       decoration-warning="state in ('pending', 'late')"
+                       decoration-danger="state == 'overdue'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- GST Filing Search View -->
+    <record id="view_gst_filing_search" model="ir.ui.view">
+        <field name="name">kosha.gst.filing.search</field>
+        <field name="model">kosha.gst.filing</field>
+        <field name="arch" type="xml">
+            <search string="GST Filings">
+                <field name="period"/>
+                <field name="return_type"/>
+                <filter name="overdue" string="Overdue"
+                        domain="[('state', '=', 'overdue')]"/>
+                <filter name="pending" string="Pending"
+                        domain="[('state', '=', 'pending')]"/>
+                <filter name="filed" string="Filed"
+                        domain="[('state', 'in', ('filed', 'late'))]"/>
+                <separator/>
+                <filter name="gstr1" string="GSTR-1"
+                        domain="[('return_type', '=', 'gstr1')]"/>
+                <filter name="gstr3b" string="GSTR-3B"
+                        domain="[('return_type', '=', 'gstr3b')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_type" string="Return Type"
+                            context="{'group_by': 'return_type'}"/>
+                    <filter name="group_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- GST Filing Action -->
+    <record id="action_gst_filing" model="ir.actions.act_window">
+        <field name="name">GST Filing Status</field>
+        <field name="res_model">kosha.gst.filing</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

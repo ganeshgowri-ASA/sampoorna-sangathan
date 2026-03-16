@@ -1,0 +1,29 @@
+/* SampoornaSangathan Dashboard Styles */
+
+.o_sangathan_kanban .o_sangathan_tile {
+    border-left: 4px solid #714B67;
+    transition: box-shadow 0.2s ease;
+}
+
+.o_sangathan_kanban .o_sangathan_tile:hover {
+    box-shadow: 0 4px 12px rgba(113, 75, 103, 0.2);
+}
+
+.o_sangathan_modules .badge {
+    font-size: 0.7em;
+    font-weight: 500;
+}
+
+.sangathan-welcome {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.sangathan-welcome h2 {
+    color: #714B67;
+    margin-bottom: 10px;
+}
+
+.sangathan-welcome p {
+    color: #666;
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu under CRM -->
+    <menuitem id="menu_sambandha_path_root"
+              name="Sambandha Path"
+              parent="crm.crm_menu_root"
+              sequence="30"/>
+
+    <!-- Lead Scoring -->
+    <menuitem id="menu_lead_scoring"
+              name="Lead Scoring"
+              parent="menu_sambandha_path_root"
+              sequence="10"/>
+
+    <menuitem id="menu_scoring_rules"
+              name="Scoring Rules"
+              parent="menu_lead_scoring"
+              action="action_lead_scoring_rules"
+              sequence="10"/>
+
+    <menuitem id="menu_auto_assign_rules"
+              name="Auto-Assignment Rules"
+              parent="menu_lead_scoring"
+              action="action_lead_auto_assign_rules"
+              sequence="20"/>
+
+    <!-- Customer 360 -->
+    <menuitem id="menu_customer_360"
+              name="Customer 360"
+              parent="menu_sambandha_path_root"
+              action="action_customer_360"
+              sequence="20"/>
+
+    <!-- Pipeline Analytics -->
+    <menuitem id="menu_pipeline_analytics"
+              name="Pipeline Analytics"
+              parent="menu_sambandha_path_root"
+              action="action_pipeline_analytics"
+              sequence="30"/>
+
+    <!-- Sales Forecast -->
+    <menuitem id="menu_sales_forecast"
+              name="Sales Forecast"
+              parent="menu_sambandha_path_root"
+              action="action_sales_forecast"
+              sequence="35"/>
+
+    <!-- Customer Journey Map -->
+    <menuitem id="menu_customer_journey"
+              name="Customer Journey"
+              parent="menu_sambandha_path_root"
+              action="action_customer_journey"
+              sequence="25"/>
+
+    <!-- Deal Rooms -->
+    <menuitem id="menu_deal_rooms"
+              name="Deal Rooms"
+              parent="menu_sambandha_path_root"
+              action="action_deal_rooms"
+              sequence="15"/>
+
+    <!-- Follow-up Rules -->
+    <menuitem id="menu_followup_rules"
+              name="Follow-up Rules"
+              parent="menu_lead_scoring"
+              action="action_followup_rules"
+              sequence="30"/>
+
+    <!-- Email Templates -->
+    <menuitem id="menu_email_templates"
+              name="Email Templates"
+              parent="menu_sambandha_path_root"
+              action="action_crm_email_templates"
+              sequence="40"/>
+</odoo>

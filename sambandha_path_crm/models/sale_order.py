@@ -1,0 +1,11 @@
+# -*- coding: utf-8 -*-
+from odoo import fields, models
+
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    sp_lead_id = fields.Many2one(
+        'crm.lead', string='Related Lead',
+        help='Lead or opportunity that originated this sale',
+    )

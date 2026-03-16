@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Financial KPI Tree View -->
+    <record id="view_financial_kpi_tree" model="ir.ui.view">
+        <field name="name">kosha.financial.kpi.tree</field>
+        <field name="model">kosha.financial.kpi</field>
+        <field name="arch" type="xml">
+            <tree string="Financial KPIs" create="0" edit="0" delete="0">
+                <field name="month"/>
+                <field name="total_revenue" sum="Total Revenue"/>
+                <field name="total_expenses" sum="Total Expenses"/>
+                <field name="net_profit" sum="Net Profit" decoration-success="net_profit > 0" decoration-danger="net_profit &lt; 0"/>
+                <field name="profit_margin" widget="progressbar"/>
+                <field name="accounts_receivable" sum="A/R"/>
+                <field name="accounts_payable" sum="A/P"/>
+                <field name="invoice_count" sum="Invoices"/>
+                <field name="bill_count" sum="Bills"/>
+                <field name="currency_count"/>
+                <field name="has_foreign_currency" widget="boolean"
+                       string="Multi-Cur"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Financial KPI Pivot View -->
+    <record id="view_financial_kpi_pivot" model="ir.ui.view">
+        <field name="name">kosha.financial.kpi.pivot</field>
+        <field name="model">kosha.financial.kpi</field>
+        <field name="arch" type="xml">
+            <pivot string="Financial KPIs">
+                <field name="month" type="row"/>
+                <field name="total_revenue" type="measure"/>
+                <field name="total_expenses" type="measure"/>
+                <field name="net_profit" type="measure"/>
+                <field name="accounts_receivable" type="measure"/>
+                <field name="accounts_payable" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Financial KPI Graph View -->
+    <record id="view_financial_kpi_graph" model="ir.ui.view">
+        <field name="name">kosha.financial.kpi.graph</field>
+        <field name="model">kosha.financial.kpi</field>
+        <field name="arch" type="xml">
+            <graph string="Financial KPIs" type="bar">
+                <field name="month"/>
+                <field name="total_revenue" type="measure"/>
+                <field name="total_expenses" type="measure"/>
+                <field name="net_profit" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Financial KPI Search View -->
+    <record id="view_financial_kpi_search" model="ir.ui.view">
+        <field name="name">kosha.financial.kpi.search</field>
+        <field name="model">kosha.financial.kpi</field>
+        <field name="arch" type="xml">
+            <search string="Financial KPIs">
+                <field name="month"/>
+                <field name="year"/>
+                <filter name="current_year" string="Current Year"
+                        domain="[('year', '=', context_today().strftime('%Y'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_year" string="Year" context="{'group_by': 'year'}"/>
+                    <filter name="group_month" string="Month" context="{'group_by': 'month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Financial KPI Action -->
+    <record id="action_financial_kpi" model="ir.actions.act_window">
+        <field name="name">Financial KPI Dashboard</field>
+        <field name="res_model">kosha.financial.kpi</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="context">{'search_default_current_year': 1}</field>
+    </record>
+
+</odoo>

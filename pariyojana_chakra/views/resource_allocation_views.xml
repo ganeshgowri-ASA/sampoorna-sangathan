@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Resource Allocation Tree -->
+    <record id="view_allocation_tree" model="ir.ui.view">
+        <field name="name">project.resource.allocation.tree</field>
+        <field name="model">project.resource.allocation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="project_id"/>
+                <field name="sprint_id" optional="show"/>
+                <field name="role"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="allocation_percentage"/>
+                <field name="planned_hours"/>
+                <field name="actual_hours"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Resource Allocation Form -->
+    <record id="view_allocation_form" model="ir.ui.view">
+        <field name="name">project.resource.allocation.form</field>
+        <field name="model">project.resource.allocation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="project_id"/>
+                            <field name="sprint_id"
+                                   domain="[('project_id', '=', project_id)]"/>
+                            <field name="role"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="allocation_percentage"/>
+                            <field name="planned_hours"/>
+                            <field name="actual_hours"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Resource Allocation Pivot (Dashboard) -->
+    <record id="view_allocation_pivot" model="ir.ui.view">
+        <field name="name">project.resource.allocation.pivot</field>
+        <field name="model">project.resource.allocation</field>
+        <field name="arch" type="xml">
+            <pivot string="Resource Allocation Dashboard">
+                <field name="employee_id" type="row"/>
+                <field name="project_id" type="col"/>
+                <field name="allocation_percentage" type="measure"/>
+                <field name="planned_hours" type="measure"/>
+                <field name="actual_hours" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Resource Allocation Graph -->
+    <record id="view_allocation_graph" model="ir.ui.view">
+        <field name="name">project.resource.allocation.graph</field>
+        <field name="model">project.resource.allocation</field>
+        <field name="arch" type="xml">
+            <graph string="Resource Allocation" type="bar">
+                <field name="employee_id"/>
+                <field name="allocation_percentage" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Resource Allocation Action -->
+    <record id="action_resource_allocation" model="ir.actions.act_window">
+        <field name="name">Resource Allocation</field>
+        <field name="res_model">project.resource.allocation</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Allocate resources to projects
+            </p>
+            <p>Track team member allocation across projects and sprints.</p>
+        </field>
+    </record>
+</odoo>

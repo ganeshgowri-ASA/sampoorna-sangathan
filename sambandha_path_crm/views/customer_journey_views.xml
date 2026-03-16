@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Customer Journey: Tree (Timeline) View -->
+    <record id="view_customer_journey_tree" model="ir.ui.view">
+        <field name="name">sambandha.customer.journey.tree</field>
+        <field name="model">sambandha.customer.journey</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0"
+                  decoration-success="event_type in ('won', 'sale_order')"
+                  decoration-danger="event_type == 'lost'"
+                  decoration-info="event_type in ('meeting', 'email_sent')"
+                  decoration-muted="event_type == 'note'"
+                  default_order="event_date desc">
+                <field name="event_date" widget="datetime"/>
+                <field name="event_type" widget="badge"
+                       decoration-success="event_type in ('won', 'sale_order')"
+                       decoration-danger="event_type == 'lost'"
+                       decoration-info="event_type in ('meeting', 'email_sent', 'email_received')"
+                       decoration-warning="event_type == 'lead_created'"/>
+                <field name="summary"/>
+                <field name="partner_id"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="lead_id" optional="show"/>
+                <field name="sale_order_id" optional="show"/>
+                <field name="revenue_impact" sum="Total Revenue Impact" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Customer Journey: Graph View -->
+    <record id="view_customer_journey_graph" model="ir.ui.view">
+        <field name="name">sambandha.customer.journey.graph</field>
+        <field name="model">sambandha.customer.journey</field>
+        <field name="arch" type="xml">
+            <graph string="Customer Journey Activity" type="bar" stacked="1">
+                <field name="event_type"/>
+                <field name="partner_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Customer Journey: Search View -->
+    <record id="view_customer_journey_search" model="ir.ui.view">
+        <field name="name">sambandha.customer.journey.search</field>
+        <field name="model">sambandha.customer.journey</field>
+        <field name="arch" type="xml">
+            <search string="Customer Journey">
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="summary"/>
+                <separator/>
+                <filter name="leads" string="Lead Events"
+                        domain="[('event_type', '=', 'lead_created')]"/>
+                <filter name="emails" string="Emails"
+                        domain="[('event_type', 'in', ['email_sent', 'email_received'])]"/>
+                <filter name="meetings" string="Meetings"
+                        domain="[('event_type', '=', 'meeting')]"/>
+                <filter name="orders" string="Sale Orders"
+                        domain="[('event_type', '=', 'sale_order')]"/>
+                <filter name="won_lost" string="Won/Lost"
+                        domain="[('event_type', 'in', ['won', 'lost'])]"/>
+                <separator/>
+                <filter name="last_30" string="Last 30 Days"
+                        domain="[('event_date', '>=', (context_today() - datetime.timedelta(days=30)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter name="last_90" string="Last 90 Days"
+                        domain="[('event_date', '>=', (context_today() - datetime.timedelta(days=90)).strftime('%%Y-%%m-%%d'))]"/>
+                <separator/>
+                <filter name="group_customer" string="Customer"
+                        context="{'group_by': 'partner_id'}"/>
+                <filter name="group_type" string="Event Type"
+                        context="{'group_by': 'event_type'}"/>
+                <filter name="group_user" string="User"
+                        context="{'group_by': 'user_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Customer Journey: Action -->
+    <record id="action_customer_journey" model="ir.actions.act_window">
+        <field name="name">Customer Journey Map</field>
+        <field name="res_model">sambandha.customer.journey</field>
+        <field name="view_mode">tree,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No journey events found
+            </p>
+            <p>Customer Journey Map shows a chronological timeline of all interactions with each customer.</p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- GST Compliance Tree View -->
+    <record id="view_gst_compliance_tree" model="ir.ui.view">
+        <field name="name">kosha.gst.compliance.tree</field>
+        <field name="model">kosha.gst.compliance</field>
+        <field name="arch" type="xml">
+            <tree string="GST Compliance" create="0" edit="0" delete="0">
+                <field name="tax_month"/>
+                <field name="move_type"/>
+                <field name="partner_id"/>
+                <field name="partner_vat"/>
+                <field name="tax_name"/>
+                <field name="tax_rate"/>
+                <field name="base_amount" sum="Total Taxable"/>
+                <field name="tax_amount" sum="Total Tax"/>
+                <field name="total_amount" sum="Grand Total"/>
+                <field name="invoice_count" sum="Invoices"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- GST Compliance Pivot View -->
+    <record id="view_gst_compliance_pivot" model="ir.ui.view">
+        <field name="name">kosha.gst.compliance.pivot</field>
+        <field name="model">kosha.gst.compliance</field>
+        <field name="arch" type="xml">
+            <pivot string="GST Compliance">
+                <field name="tax_month" type="row"/>
+                <field name="move_type" type="col"/>
+                <field name="base_amount" type="measure"/>
+                <field name="tax_amount" type="measure"/>
+                <field name="total_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- GST Compliance Graph View -->
+    <record id="view_gst_compliance_graph" model="ir.ui.view">
+        <field name="name">kosha.gst.compliance.graph</field>
+        <field name="model">kosha.gst.compliance</field>
+        <field name="arch" type="xml">
+            <graph string="GST Compliance" type="bar">
+                <field name="tax_month"/>
+                <field name="base_amount" type="measure"/>
+                <field name="tax_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- GST Compliance Search View -->
+    <record id="view_gst_compliance_search" model="ir.ui.view">
+        <field name="name">kosha.gst.compliance.search</field>
+        <field name="model">kosha.gst.compliance</field>
+        <field name="arch" type="xml">
+            <search string="GST Compliance">
+                <field name="tax_month"/>
+                <field name="partner_id"/>
+                <field name="partner_vat"/>
+                <filter name="gstr1" string="GSTR-1 (Sales)"
+                        domain="[('move_type', '=', 'out_invoice')]"/>
+                <filter name="gstr3b" string="GSTR-3B (Purchases)"
+                        domain="[('move_type', '=', 'in_invoice')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_period" string="Tax Period" context="{'group_by': 'tax_month'}"/>
+                    <filter name="group_type" string="Type" context="{'group_by': 'move_type'}"/>
+                    <filter name="group_tax" string="Tax" context="{'group_by': 'tax_name'}"/>
+                    <filter name="group_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- GST Compliance Action -->
+    <record id="action_gst_compliance" model="ir.actions.act_window">
+        <field name="name">GST Compliance Reports</field>
+        <field name="res_model">kosha.gst.compliance</field>
+        <field name="view_mode">pivot,graph,tree</field>
+    </record>
+
+</odoo>

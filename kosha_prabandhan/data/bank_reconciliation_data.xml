@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Bank Reconciliation Sequence -->
+        <record id="seq_bank_reconciliation" model="ir.sequence">
+            <field name="name">Bank Reconciliation</field>
+            <field name="code">kosha.bank.reconciliation</field>
+            <field name="prefix">RECON/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

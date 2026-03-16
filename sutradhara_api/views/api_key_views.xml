@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- API Key List View -->
+    <record id="sutradhara_api_key_view_list" model="ir.ui.view">
+        <field name="name">sutradhara.api.key.list</field>
+        <field name="model">sutradhara.api.key</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="key" password="True"/>
+                <field name="rate_limit"/>
+                <field name="last_used"/>
+                <field name="expires_at"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- API Key Form View -->
+    <record id="sutradhara_api_key_view_form" model="ir.ui.view">
+        <field name="name">sutradhara.api.key.form</field>
+        <field name="model">sutradhara.api.key</field>
+        <field name="arch" type="xml">
+            <form string="API Key">
+                <header>
+                    <button name="action_regenerate_key" type="object"
+                            string="Regenerate Key" class="btn-warning"
+                            confirm="This will invalidate the current key. Continue?"/>
+                    <button name="action_deactivate" type="object"
+                            string="Deactivate" class="btn-danger"
+                            invisible="not active"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="API Key Name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="key" password="True"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="rate_limit"/>
+                            <field name="allowed_origins"/>
+                            <field name="expires_at"/>
+                            <field name="last_used"/>
+                            <field name="request_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note" placeholder="Usage notes..."/>
+                        </page>
+                        <page string="Request Logs">
+                            <field name="log_ids" readonly="1">
+                                <tree>
+                                    <field name="timestamp"/>
+                                    <field name="endpoint"/>
+                                    <field name="method"/>
+                                    <field name="response_code"/>
+                                    <field name="ip_address"/>
+                                    <field name="response_time_ms"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- API Key Action -->
+    <record id="sutradhara_api_key_action" model="ir.actions.act_window">
+        <field name="name">API Keys</field>
+        <field name="res_model">sutradhara.api.key</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first API key
+            </p>
+            <p>
+                API keys authenticate requests from external applications
+                like the Vercel frontend.
+            </p>
+        </field>
+    </record>
+</odoo>

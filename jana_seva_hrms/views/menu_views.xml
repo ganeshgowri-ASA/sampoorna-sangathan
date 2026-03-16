@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Top-level menu -->
+    <menuitem id="menu_jana_seva_hrms_root"
+              name="Jana Seva HRMS"
+              groups="hr.group_hr_user"
+              sequence="45"/>
+
+    <!-- Onboarding -->
+    <menuitem id="menu_onboarding"
+              name="Onboarding"
+              parent="menu_jana_seva_hrms_root"
+              sequence="10"/>
+
+    <menuitem id="menu_onboarding_tasks"
+              name="Onboarding Tasks"
+              parent="menu_onboarding"
+              action="action_hr_onboarding_task"
+              sequence="10"/>
+
+    <!-- Documents -->
+    <menuitem id="menu_documents"
+              name="Documents"
+              parent="menu_jana_seva_hrms_root"
+              sequence="20"/>
+
+    <menuitem id="menu_employee_documents"
+              name="Employee Documents"
+              parent="menu_documents"
+              action="action_hr_document"
+              sequence="10"/>
+
+    <menuitem id="menu_document_types"
+              name="Document Types"
+              parent="menu_documents"
+              action="action_hr_document_type"
+              sequence="20"
+              groups="hr.group_hr_manager"/>
+
+    <!-- Leave Dashboard -->
+    <menuitem id="menu_leave_dashboard"
+              name="Leave Dashboard"
+              parent="menu_jana_seva_hrms_root"
+              action="action_hr_leave_dashboard"
+              sequence="30"/>
+
+    <!-- Attendance Analytics -->
+    <menuitem id="menu_attendance_analytics"
+              name="Attendance Analytics"
+              parent="menu_jana_seva_hrms_root"
+              action="action_hr_attendance_analytics"
+              sequence="40"/>
+
+</odoo>

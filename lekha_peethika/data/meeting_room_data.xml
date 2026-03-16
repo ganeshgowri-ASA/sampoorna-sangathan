@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="meeting_room_board" model="lekha.meeting.room">
+        <field name="name">Board Room</field>
+        <field name="code">BR-01</field>
+        <field name="capacity">20</field>
+        <field name="location">1st Floor</field>
+        <field name="has_projector" eval="True"/>
+        <field name="has_whiteboard" eval="True"/>
+        <field name="has_video_conf" eval="True"/>
+    </record>
+    <record id="meeting_room_conf_a" model="lekha.meeting.room">
+        <field name="name">Conference Room A</field>
+        <field name="code">CR-A</field>
+        <field name="capacity">10</field>
+        <field name="location">2nd Floor</field>
+        <field name="has_projector" eval="True"/>
+        <field name="has_video_conf" eval="True"/>
+    </record>
+    <record id="meeting_room_huddle" model="lekha.meeting.room">
+        <field name="name">Huddle Space</field>
+        <field name="code">HS-01</field>
+        <field name="capacity">4</field>
+        <field name="location">Ground Floor</field>
+        <field name="has_whiteboard" eval="True"/>
+    </record>
+</odoo>

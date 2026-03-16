@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="document_category_hr" model="lekha.document.category">
+        <field name="name">Human Resources</field>
+        <field name="code">HR</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="document_category_finance" model="lekha.document.category">
+        <field name="name">Finance</field>
+        <field name="code">FIN</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="document_category_legal" model="lekha.document.category">
+        <field name="name">Legal</field>
+        <field name="code">LEG</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="document_category_operations" model="lekha.document.category">
+        <field name="name">Operations</field>
+        <field name="code">OPS</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="document_category_general" model="lekha.document.category">
+        <field name="name">General</field>
+        <field name="code">GEN</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- Sequences -->
+    <record id="seq_lekha_document" model="ir.sequence">
+        <field name="name">Document Sequence</field>
+        <field name="code">lekha.document</field>
+        <field name="prefix">DOC/%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+    <record id="seq_lekha_policy" model="ir.sequence">
+        <field name="name">Policy Sequence</field>
+        <field name="code">lekha.company.policy</field>
+        <field name="prefix">POL/%(year)s/</field>
+        <field name="padding">4</field>
+    </record>
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_pariyojana_root"
+              name="Pariyojana Chakra"
+              web_icon="pariyojana_chakra,static/description/icon.png"
+              sequence="25"/>
+
+    <!-- Sprint Planning -->
+    <menuitem id="menu_sprint_planning"
+              name="Sprint Planning"
+              parent="menu_pariyojana_root"
+              sequence="10"/>
+    <menuitem id="menu_sprint_all"
+              name="Sprints"
+              parent="menu_sprint_planning"
+              action="action_project_sprint"
+              sequence="10"/>
+
+    <!-- Milestones & Deliverables -->
+    <menuitem id="menu_milestones"
+              name="Milestones &amp; Deliverables"
+              parent="menu_pariyojana_root"
+              sequence="20"/>
+    <menuitem id="menu_deliverable_all"
+              name="Deliverables"
+              parent="menu_milestones"
+              action="action_project_deliverable"
+              sequence="10"/>
+
+    <!-- Resources -->
+    <menuitem id="menu_resources"
+              name="Resources"
+              parent="menu_pariyojana_root"
+              sequence="30"/>
+    <menuitem id="menu_allocation"
+              name="Resource Allocation"
+              parent="menu_resources"
+              action="action_resource_allocation"
+              sequence="10"/>
+
+    <!-- Analytics -->
+    <menuitem id="menu_analytics"
+              name="Analytics"
+              parent="menu_pariyojana_root"
+              sequence="40"/>
+    <menuitem id="menu_burndown"
+              name="Burndown Chart"
+              parent="menu_analytics"
+              action="action_timesheet_burndown"
+              sequence="10"/>
+    <menuitem id="menu_work_type"
+              name="Hours by Work Type"
+              parent="menu_analytics"
+              action="action_timesheet_by_work_type"
+              sequence="20"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_config"
+              name="Configuration"
+              parent="menu_pariyojana_root"
+              sequence="50"/>
+    <menuitem id="menu_templates"
+              name="Project Templates"
+              parent="menu_config"
+              action="action_project_template"
+              sequence="10"/>
+</odoo>

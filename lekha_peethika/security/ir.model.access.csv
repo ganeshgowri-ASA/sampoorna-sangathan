@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_document_category_user,lekha.document.category.user,model_lekha_document_category,base.group_user,1,0,0,0
+access_document_category_manager,lekha.document.category.manager,model_lekha_document_category,hr.group_hr_manager,1,1,1,1
+access_document_tag_user,lekha.document.tag.user,model_lekha_document_tag,base.group_user,1,0,0,0
+access_document_tag_manager,lekha.document.tag.manager,model_lekha_document_tag,hr.group_hr_manager,1,1,1,1
+access_document_user,lekha.document.user,model_lekha_document,base.group_user,1,1,1,0
+access_document_manager,lekha.document.manager,model_lekha_document,hr.group_hr_manager,1,1,1,1
+access_meeting_room_user,lekha.meeting.room.user,model_lekha_meeting_room,base.group_user,1,0,0,0
+access_meeting_room_manager,lekha.meeting.room.manager,model_lekha_meeting_room,hr.group_hr_manager,1,1,1,1
+access_room_booking_user,lekha.room.booking.user,model_lekha_room_booking,base.group_user,1,1,1,0
+access_room_booking_manager,lekha.room.booking.manager,model_lekha_room_booking,hr.group_hr_manager,1,1,1,1
+access_announcement_user,lekha.announcement.user,model_lekha_announcement,base.group_user,1,0,0,0
+access_announcement_manager,lekha.announcement.manager,model_lekha_announcement,hr.group_hr_manager,1,1,1,1
+access_company_policy_user,lekha.company.policy.user,model_lekha_company_policy,base.group_user,1,0,0,0
+access_company_policy_manager,lekha.company.policy.manager,model_lekha_company_policy,hr.group_hr_manager,1,1,1,1

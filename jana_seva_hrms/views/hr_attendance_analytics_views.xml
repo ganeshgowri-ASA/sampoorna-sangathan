@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Attendance Analytics List -->
+    <record id="hr_attendance_analytics_tree" model="ir.ui.view">
+        <field name="name">hr.attendance.analytics.list</field>
+        <field name="model">hr.attendance.analytics</field>
+        <field name="arch" type="xml">
+            <tree decoration-warning="is_late" decoration-info="overtime_hours &gt; 0">
+                <field name="employee_id" widget="many2one_avatar"/>
+                <field name="department_id"/>
+                <field name="attendance_date"/>
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <field name="worked_hours" widget="float_time"/>
+                <field name="overtime_hours" widget="float_time"/>
+                <field name="is_late"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Attendance Analytics Pivot -->
+    <record id="hr_attendance_analytics_pivot" model="ir.ui.view">
+        <field name="name">hr.attendance.analytics.pivot</field>
+        <field name="model">hr.attendance.analytics</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="department_id" type="row"/>
+                <field name="month" type="col"/>
+                <field name="worked_hours" type="measure"/>
+                <field name="overtime_hours" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Attendance Analytics Graph -->
+    <record id="hr_attendance_analytics_graph" model="ir.ui.view">
+        <field name="name">hr.attendance.analytics.graph</field>
+        <field name="model">hr.attendance.analytics</field>
+        <field name="arch" type="xml">
+            <graph type="bar">
+                <field name="month"/>
+                <field name="worked_hours" type="measure"/>
+                <field name="overtime_hours" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Attendance Analytics Search -->
+    <record id="hr_attendance_analytics_search" model="ir.ui.view">
+        <field name="name">hr.attendance.analytics.search</field>
+        <field name="model">hr.attendance.analytics</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <filter name="late_arrivals" string="Late Arrivals"
+                        domain="[('is_late', '=', True)]"/>
+                <filter name="has_overtime" string="Has Overtime"
+                        domain="[('overtime_hours', '&gt;', 0)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee"
+                            context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_department" string="Department"
+                            context="{'group_by': 'department_id'}"/>
+                    <filter name="group_month" string="Month"
+                            context="{'group_by': 'month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_attendance_analytics" model="ir.actions.act_window">
+        <field name="name">Attendance Analytics</field>
+        <field name="res_model">hr.attendance.analytics</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="search_view_id" ref="hr_attendance_analytics_search"/>
+    </record>
+
+</odoo>

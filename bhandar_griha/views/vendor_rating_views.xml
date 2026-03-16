@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vendor Rating Tree View -->
+    <record id="view_vendor_rating_tree" model="ir.ui.view">
+        <field name="name">bhandar.griha.vendor.rating.tree</field>
+        <field name="model">bhandar.griha.vendor.rating</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="partner_id"/>
+                <field name="rating_date"/>
+                <field name="purchase_order_id" optional="show"/>
+                <field name="delivery_score"/>
+                <field name="quality_score"/>
+                <field name="price_score"/>
+                <field name="overall_score" decoration-success="overall_score >= 4"
+                    decoration-warning="overall_score >= 2.5 and overall_score &lt; 4"
+                    decoration-danger="overall_score &lt; 2.5"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vendor Rating Form View -->
+    <record id="view_vendor_rating_form" model="ir.ui.view">
+        <field name="name">bhandar.griha.vendor.rating.form</field>
+        <field name="model">bhandar.griha.vendor.rating</field>
+        <field name="arch" type="xml">
+            <form string="Vendor Rating">
+                <sheet>
+                    <group>
+                        <group string="Vendor Information">
+                            <field name="partner_id"/>
+                            <field name="purchase_order_id"/>
+                            <field name="rating_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Scores">
+                            <field name="delivery_score"/>
+                            <field name="quality_score"/>
+                            <field name="price_score"/>
+                            <field name="overall_score"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vendor Rating Search View -->
+    <record id="view_vendor_rating_search" model="ir.ui.view">
+        <field name="name">bhandar.griha.vendor.rating.search</field>
+        <field name="model">bhandar.griha.vendor.rating</field>
+        <field name="arch" type="xml">
+            <search string="Vendor Ratings">
+                <field name="partner_id"/>
+                <field name="purchase_order_id"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_vendor" string="Vendor"
+                        context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_month" string="Month"
+                        context="{'group_by': 'rating_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Vendor Rating Action -->
+    <record id="action_vendor_rating" model="ir.actions.act_window">
+        <field name="name">Vendor Ratings</field>
+        <field name="res_model">bhandar.griha.vendor.rating</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_vendor_rating_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Rate your vendors
+            </p>
+            <p>
+                Track vendor performance on delivery, quality, and pricing.
+            </p>
+        </field>
+    </record>
+</odoo>

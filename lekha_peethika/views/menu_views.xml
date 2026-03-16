@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-level menu -->
+    <menuitem id="menu_lekha_root"
+        name="Lekha Peethika"
+        web_icon="lekha_peethika,static/description/icon.png"
+        sequence="80"/>
+
+    <!-- Documents -->
+    <menuitem id="menu_lekha_documents"
+        name="Documents"
+        parent="menu_lekha_root"
+        sequence="10"/>
+    <menuitem id="menu_lekha_document_list"
+        name="All Documents"
+        parent="menu_lekha_documents"
+        action="action_lekha_document"
+        sequence="10"/>
+    <menuitem id="menu_lekha_document_category"
+        name="Categories"
+        parent="menu_lekha_documents"
+        action="action_lekha_document_category"
+        sequence="20"
+        groups="hr.group_hr_manager"/>
+    <menuitem id="menu_lekha_document_tag"
+        name="Tags"
+        parent="menu_lekha_documents"
+        action="action_lekha_document_tag"
+        sequence="30"
+        groups="hr.group_hr_manager"/>
+
+    <!-- Meetings -->
+    <menuitem id="menu_lekha_meetings"
+        name="Meetings"
+        parent="menu_lekha_root"
+        sequence="20"/>
+    <menuitem id="menu_lekha_meeting_room"
+        name="Meeting Rooms"
+        parent="menu_lekha_meetings"
+        action="action_lekha_meeting_room"
+        sequence="10"/>
+    <menuitem id="menu_lekha_room_booking"
+        name="Room Bookings"
+        parent="menu_lekha_meetings"
+        action="action_lekha_room_booking"
+        sequence="20"/>
+
+    <!-- Announcements -->
+    <menuitem id="menu_lekha_announcements"
+        name="Announcements"
+        parent="menu_lekha_root"
+        action="action_lekha_announcement"
+        sequence="30"/>
+
+    <!-- Policies -->
+    <menuitem id="menu_lekha_policies"
+        name="Policies"
+        parent="menu_lekha_root"
+        action="action_lekha_policy"
+        sequence="40"/>
+
+    <!-- Employee Directory -->
+    <menuitem id="menu_lekha_directory"
+        name="Employee Directory"
+        parent="menu_lekha_root"
+        action="action_lekha_employee_directory"
+        sequence="50"/>
+</odoo>

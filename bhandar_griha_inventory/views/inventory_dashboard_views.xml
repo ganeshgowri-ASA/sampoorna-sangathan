@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard Tree View -->
+    <record id="bhandar_griha_dashboard_tree" model="ir.ui.view">
+        <field name="name">bhandar.griha.dashboard.tree</field>
+        <field name="model">bhandar.griha.dashboard</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="state == 'critical'" decoration-warning="state == 'warning'">
+                <field name="name"/>
+                <field name="warehouse_id"/>
+                <field name="date"/>
+                <field name="total_products"/>
+                <field name="total_stock_value" widget="monetary"/>
+                <field name="low_stock_count"/>
+                <field name="incoming_moves"/>
+                <field name="outgoing_moves"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state == 'critical'"
+                       decoration-warning="state == 'warning'"
+                       decoration-success="state == 'normal'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Dashboard Form View -->
+    <record id="bhandar_griha_dashboard_form" model="ir.ui.view">
+        <field name="name">bhandar.griha.dashboard.form</field>
+        <field name="model">bhandar.griha.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Inventory Dashboard">
+                <header>
+                    <button name="action_refresh_kpis" type="object"
+                            string="Refresh KPIs" class="btn-primary"
+                            icon="fa-refresh"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Warehouse Info">
+                            <field name="warehouse_id"/>
+                            <field name="date"/>
+                            <field name="sangathan_ref"/>
+                        </group>
+                        <group string="Stock KPIs">
+                            <field name="total_products"/>
+                            <field name="total_stock_value" widget="monetary"/>
+                            <field name="low_stock_count"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Today's Movements">
+                            <field name="incoming_moves"/>
+                            <field name="outgoing_moves"/>
+                            <field name="internal_moves"/>
+                        </group>
+                        <group string="Classification">
+                            <field name="priority" widget="priority"/>
+                            <field name="tag_ids" widget="many2many_tags"
+                                   options="{'color_field': 'color'}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Dashboard Graph View -->
+    <record id="bhandar_griha_dashboard_graph" model="ir.ui.view">
+        <field name="name">bhandar.griha.dashboard.graph</field>
+        <field name="model">bhandar.griha.dashboard</field>
+        <field name="arch" type="xml">
+            <graph string="Stock Levels by Warehouse" type="bar">
+                <field name="warehouse_id"/>
+                <field name="total_products" type="measure"/>
+                <field name="total_stock_value" type="measure"/>
+                <field name="low_stock_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Dashboard Pivot View -->
+    <record id="bhandar_griha_dashboard_pivot" model="ir.ui.view">
+        <field name="name">bhandar.griha.dashboard.pivot</field>
+        <field name="model">bhandar.griha.dashboard</field>
+        <field name="arch" type="xml">
+            <pivot string="Inventory Analytics">
+                <field name="warehouse_id" type="row"/>
+                <field name="date" type="col" interval="month"/>
+                <field name="total_stock_value" type="measure"/>
+                <field name="low_stock_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Dashboard Search View -->
+    <record id="bhandar_griha_dashboard_search" model="ir.ui.view">
+        <field name="name">bhandar.griha.dashboard.search</field>
+        <field name="model">bhandar.griha.dashboard</field>
+        <field name="arch" type="xml">
+            <search string="Search Dashboard">
+                <field name="warehouse_id"/>
+                <field name="date"/>
+                <filter name="filter_today" string="Today"
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_critical" string="Critical"
+                        domain="[('state', '=', 'critical')]"/>
+                <filter name="filter_warning" string="Warning"
+                        domain="[('state', 'in', ['warning', 'critical'])]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="groupby_warehouse" string="Warehouse"
+                            context="{'group_by': 'warehouse_id'}"/>
+                    <filter name="groupby_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="groupby_date" string="Date"
+                            context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Dashboard Action -->
+    <record id="action_bhandar_griha_dashboard" model="ir.actions.act_window">
+        <field name="name">Inventory Dashboard</field>
+        <field name="res_model">bhandar.griha.dashboard</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="search_view_id" ref="bhandar_griha_dashboard_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first dashboard entry
+            </p>
+            <p>Track inventory KPIs across your warehouses.</p>
+        </field>
+    </record>
+
+    <!-- Replenishment Rules Tree View -->
+    <record id="bhandar_griha_replenishment_tree" model="ir.ui.view">
+        <field name="name">bhandar.griha.replenishment.tree</field>
+        <field name="model">bhandar.griha.replenishment</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="state == 'critical'" decoration-warning="state == 'low'">
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <field name="min_qty"/>
+                <field name="max_qty"/>
+                <field name="on_hand_qty"/>
+                <field name="supplier_id"/>
+                <field name="auto_create_po"/>
+                <field name="last_replenishment_date"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state == 'critical'"
+                       decoration-warning="state == 'low'"
+                       decoration-success="state == 'ok'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Replenishment Rules Form View -->
+    <record id="bhandar_griha_replenishment_form" model="ir.ui.view">
+        <field name="name">bhandar.griha.replenishment.form</field>
+        <field name="model">bhandar.griha.replenishment</field>
+        <field name="arch" type="xml">
+            <form string="Smart Replenishment Rule">
+                <header>
+                    <button name="action_trigger_replenishment" type="object"
+                            string="Trigger Replenishment" class="btn-primary"
+                            icon="fa-truck"
+                            confirm="Create a purchase order for this product?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Product &amp; Location">
+                            <field name="product_id"/>
+                            <field name="warehouse_id"/>
+                            <field name="supplier_id"/>
+                            <field name="sangathan_ref"/>
+                        </group>
+                        <group string="Quantity Rules">
+                            <field name="min_qty"/>
+                            <field name="max_qty"/>
+                            <field name="on_hand_qty"/>
+                            <field name="auto_create_po"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="History">
+                            <field name="last_replenishment_date"/>
+                        </group>
+                        <group string="Classification">
+                            <field name="priority" widget="priority"/>
+                            <field name="tag_ids" widget="many2many_tags"
+                                   options="{'color_field': 'color'}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Replenishment Search View -->
+    <record id="bhandar_griha_replenishment_search" model="ir.ui.view">
+        <field name="name">bhandar.griha.replenishment.search</field>
+        <field name="model">bhandar.griha.replenishment</field>
+        <field name="arch" type="xml">
+            <search string="Search Replenishment Rules">
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <field name="supplier_id"/>
+                <filter name="filter_low" string="Low Stock"
+                        domain="[('state', '=', 'low')]"/>
+                <filter name="filter_critical" string="Critical"
+                        domain="[('state', '=', 'critical')]"/>
+                <filter name="filter_active" string="Active Rules"
+                        domain="[('active', '=', True)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="groupby_warehouse" string="Warehouse"
+                            context="{'group_by': 'warehouse_id'}"/>
+                    <filter name="groupby_product" string="Product"
+                            context="{'group_by': 'product_id'}"/>
+                    <filter name="groupby_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="groupby_supplier" string="Supplier"
+                            context="{'group_by': 'supplier_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Replenishment Action -->
+    <record id="action_bhandar_griha_replenishment" model="ir.actions.act_window">
+        <field name="name">Smart Replenishment</field>
+        <field name="res_model">bhandar.griha.replenishment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="bhandar_griha_replenishment_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Set up smart replenishment rules
+            </p>
+            <p>Define min/max stock levels per product per warehouse to auto-trigger purchase orders.</p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Follow-up Rule: Tree View -->
+    <record id="view_followup_rule_tree" model="ir.ui.view">
+        <field name="name">sambandha.followup.rule.tree</field>
+        <field name="model">sambandha.followup.rule</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="trigger_type"/>
+                <field name="trigger_days"/>
+                <field name="action_type"/>
+                <field name="last_run"/>
+                <field name="leads_matched"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Follow-up Rule: Form View -->
+    <record id="view_followup_rule_form" model="ir.ui.view">
+        <field name="name">sambandha.followup.rule.form</field>
+        <field name="model">sambandha.followup.rule</field>
+        <field name="arch" type="xml">
+            <form string="Follow-up Rule">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Rule Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Trigger Condition">
+                            <field name="trigger_type"/>
+                            <field name="trigger_days"
+                                   invisible="trigger_type == 'score_below'"/>
+                            <field name="trigger_score"
+                                   invisible="trigger_type != 'score_below'"/>
+                        </group>
+                        <group string="Filters">
+                            <field name="lead_type"/>
+                            <field name="stage_ids" widget="many2many_tags"/>
+                            <field name="team_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Action">
+                            <field name="action_type"/>
+                            <field name="activity_type_id"
+                                   invisible="action_type == 'notify'"/>
+                            <field name="activity_summary"
+                                   invisible="action_type == 'notify'"/>
+                            <field name="activity_deadline_days"
+                                   invisible="action_type == 'notify'"/>
+                        </group>
+                        <group string="Settings">
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Activity Note" invisible="action_type == 'notify'">
+                        <field name="activity_note" nolabel="1" placeholder="Custom note for the activity..."/>
+                    </group>
+                    <group string="Last Execution">
+                        <field name="last_run"/>
+                        <field name="leads_matched"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Follow-up Rule: Action -->
+    <record id="action_followup_rules" model="ir.actions.act_window">
+        <field name="name">Follow-up Rules</field>
+        <field name="res_model">sambandha.followup.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first follow-up rule
+            </p>
+            <p>Automated follow-up rules monitor your leads and create activities or send
+            notifications when trigger conditions are met (e.g., no activity for 7 days).</p>
+        </field>
+    </record>
+</odoo>

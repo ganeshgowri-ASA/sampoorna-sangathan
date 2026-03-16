@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sales Forecast: Graph View (Line chart for revenue predictions) -->
+    <record id="view_sales_forecast_graph" model="ir.ui.view">
+        <field name="name">sambandha.sales.forecast.graph</field>
+        <field name="model">sambandha.sales.forecast</field>
+        <field name="arch" type="xml">
+            <graph string="Sales Forecast" type="line">
+                <field name="forecast_month"/>
+                <field name="forecast_revenue" type="measure"/>
+                <field name="weighted_revenue" type="measure"/>
+                <field name="expected_revenue" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Sales Forecast: Bar Chart View -->
+    <record id="view_sales_forecast_graph_bar" model="ir.ui.view">
+        <field name="name">sambandha.sales.forecast.graph.bar</field>
+        <field name="model">sambandha.sales.forecast</field>
+        <field name="arch" type="xml">
+            <graph string="Revenue by Team" type="bar">
+                <field name="team_id"/>
+                <field name="forecast_revenue" type="measure"/>
+                <field name="won_revenue" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Sales Forecast: Pivot View -->
+    <record id="view_sales_forecast_pivot" model="ir.ui.view">
+        <field name="name">sambandha.sales.forecast.pivot</field>
+        <field name="model">sambandha.sales.forecast</field>
+        <field name="arch" type="xml">
+            <pivot string="Sales Forecast">
+                <field name="forecast_month" type="row"/>
+                <field name="team_id" type="col"/>
+                <field name="forecast_revenue" type="measure"/>
+                <field name="weighted_revenue" type="measure"/>
+                <field name="expected_revenue" type="measure"/>
+                <field name="opportunity_count" type="measure"/>
+                <field name="win_rate" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Sales Forecast: Tree View -->
+    <record id="view_sales_forecast_tree" model="ir.ui.view">
+        <field name="name">sambandha.sales.forecast.tree</field>
+        <field name="model">sambandha.sales.forecast</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" decoration-success="win_rate >= 50" decoration-muted="win_rate == 0">
+                <field name="forecast_month"/>
+                <field name="forecast_quarter"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="team_id"/>
+                <field name="opportunity_count"/>
+                <field name="expected_revenue" sum="Total Expected"/>
+                <field name="weighted_revenue" sum="Total Weighted"/>
+                <field name="forecast_revenue" sum="Total Forecast"/>
+                <field name="win_rate" widget="progressbar"/>
+                <field name="avg_deal_size"/>
+                <field name="avg_days_to_close" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Sales Forecast: Search View -->
+    <record id="view_sales_forecast_search" model="ir.ui.view">
+        <field name="name">sambandha.sales.forecast.search</field>
+        <field name="model">sambandha.sales.forecast</field>
+        <field name="arch" type="xml">
+            <search string="Sales Forecast">
+                <field name="user_id"/>
+                <field name="team_id"/>
+                <field name="forecast_month"/>
+                <separator/>
+                <filter name="high_win_rate" string="High Win Rate (50%+)"
+                        domain="[('win_rate', '>=', 50)]"/>
+                <filter name="large_pipeline" string="Large Pipeline (100k+)"
+                        domain="[('expected_revenue', '>=', 100000)]"/>
+                <separator/>
+                <filter name="group_month" string="Month"
+                        context="{'group_by': 'forecast_month'}"/>
+                <filter name="group_quarter" string="Quarter"
+                        context="{'group_by': 'forecast_quarter'}"/>
+                <filter name="group_team" string="Sales Team"
+                        context="{'group_by': 'team_id'}"/>
+                <filter name="group_user" string="Salesperson"
+                        context="{'group_by': 'user_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Sales Forecast: Action -->
+    <record id="action_sales_forecast" model="ir.actions.act_window">
+        <field name="name">Sales Forecast</field>
+        <field name="res_model">sambandha.sales.forecast</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No forecast data available
+            </p>
+            <p>Sales forecasting provides revenue predictions based on your pipeline data and historical win rates.</p>
+        </field>
+    </record>
+</odoo>

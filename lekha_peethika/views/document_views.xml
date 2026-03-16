@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Category Views -->
+    <record id="lekha_document_category_list" model="ir.ui.view">
+        <field name="name">lekha.document.category.list</field>
+        <field name="model">lekha.document.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="parent_id"/>
+                <field name="document_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="lekha_document_category_form" model="ir.ui.view">
+        <field name="name">lekha.document.category.form</field>
+        <field name="model">lekha.document.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="parent_id"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Subcategories" name="subcategories">
+                            <field name="child_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Document Tag Views -->
+    <record id="lekha_document_tag_list" model="ir.ui.view">
+        <field name="name">lekha.document.tag.list</field>
+        <field name="model">lekha.document.tag</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Document Views -->
+    <record id="lekha_document_list" model="ir.ui.view">
+        <field name="name">lekha.document.list</field>
+        <field name="model">lekha.document</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="is_expired" decoration-muted="state == 'archived'">
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="owner_id" widget="many2one_avatar_user"/>
+                <field name="version"/>
+                <field name="expiry_date"/>
+                <field name="is_expired" column_invisible="True"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'review'" decoration-success="state == 'approved'" decoration-muted="state == 'archived'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="lekha_document_form" model="ir.ui.view">
+        <field name="name">lekha.document.form</field>
+        <field name="model">lekha.document</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit_review" string="Submit for Review" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary" invisible="state != 'review'" groups="hr.group_hr_manager"/>
+                    <button name="action_archive" string="Archive" type="object" invisible="state not in ('draft', 'approved')"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,review,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Document Title"/>
+                        </h1>
+                        <field name="reference"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category_id"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="owner_id" widget="many2one_avatar_user"/>
+                        </group>
+                        <group>
+                            <field name="version"/>
+                            <field name="expiry_date"/>
+                            <field name="is_expired"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Content" name="content">
+                            <field name="description"/>
+                        </page>
+                        <page string="Attachments" name="attachments">
+                            <field name="attachment_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="lekha_document_kanban" model="ir.ui.view">
+        <field name="name">lekha.document.kanban</field>
+        <field name="model">lekha.document</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="category_id" class="o_kanban_small_column">
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <strong><field name="name"/></strong>
+                                <div class="text-muted"><field name="reference"/></div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                    <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'review': 'warning', 'approved': 'success', 'archived': 'secondary'}}"/>
+                                </div>
+                                <div class="mt-1">
+                                    <field name="owner_id" widget="many2one_avatar_user"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="lekha_document_search" model="ir.ui.view">
+        <field name="name">lekha.document.search</field>
+        <field name="model">lekha.document</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="category_id"/>
+                <field name="tag_ids"/>
+                <field name="owner_id"/>
+                <separator/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Under Review" name="review" domain="[('state', '=', 'review')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Expired" name="expired" domain="[('is_expired', '=', True)]"/>
+                <separator/>
+                <filter string="My Documents" name="my_documents" domain="[('owner_id', '=', uid)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Owner" name="group_owner" context="{'group_by': 'owner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_lekha_document" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">lekha.document</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="lekha_document_search"/>
+        <field name="context">{'search_default_my_documents': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first document</p>
+            <p>Organize and manage your company documents with categories and tags.</p>
+        </field>
+    </record>
+
+    <record id="action_lekha_document_category" model="ir.actions.act_window">
+        <field name="name">Document Categories</field>
+        <field name="res_model">lekha.document.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_lekha_document_tag" model="ir.actions.act_window">
+        <field name="name">Document Tags</field>
+        <field name="res_model">lekha.document.tag</field>
+        <field name="view_mode">tree</field>
+    </record>
+</odoo>

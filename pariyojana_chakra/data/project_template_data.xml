@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="template_software_dev" model="project.template">
+        <field name="name">Software Development Project</field>
+        <field name="description">&lt;p&gt;Standard software development project template with agile sprints&lt;/p&gt;</field>
+        <field name="default_sprint_duration">14</field>
+        <field name="milestone_names">Requirements Gathering
+Design &amp; Architecture
+Development Phase 1
+Testing &amp; QA
+Deployment &amp; Launch</field>
+    </record>
+    <record id="template_task_requirements" model="project.template.task">
+        <field name="name">Gather Requirements</field>
+        <field name="template_id" ref="template_software_dev"/>
+        <field name="sequence">1</field>
+        <field name="planned_hours">16</field>
+    </record>
+    <record id="template_task_design" model="project.template.task">
+        <field name="name">System Design</field>
+        <field name="template_id" ref="template_software_dev"/>
+        <field name="sequence">2</field>
+        <field name="planned_hours">24</field>
+    </record>
+    <record id="template_task_development" model="project.template.task">
+        <field name="name">Core Development</field>
+        <field name="template_id" ref="template_software_dev"/>
+        <field name="sequence">3</field>
+        <field name="planned_hours">80</field>
+    </record>
+    <record id="template_task_testing" model="project.template.task">
+        <field name="name">Testing &amp; QA</field>
+        <field name="template_id" ref="template_software_dev"/>
+        <field name="sequence">4</field>
+        <field name="planned_hours">40</field>
+    </record>
+</odoo>

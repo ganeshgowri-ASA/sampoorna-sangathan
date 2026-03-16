@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Deal Room: Tree View -->
+    <record id="view_deal_room_tree" model="ir.ui.view">
+        <field name="name">sambandha.deal.room.tree</field>
+        <field name="model">sambandha.deal.room</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state == 'won'"
+                  decoration-danger="state == 'lost'"
+                  decoration-muted="state == 'archived'">
+                <field name="name"/>
+                <field name="lead_id"/>
+                <field name="partner_id"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="expected_revenue" sum="Total Pipeline"/>
+                <field name="probability" widget="progressbar"/>
+                <field name="stage_id"/>
+                <field name="pending_action_count" string="Pending"/>
+                <field name="target_close_date"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'won'"
+                       decoration-danger="state == 'lost'"
+                       decoration-info="state == 'active'"
+                       decoration-muted="state == 'archived'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Deal Room: Form View -->
+    <record id="view_deal_room_form" model="ir.ui.view">
+        <field name="name">sambandha.deal.room.form</field>
+        <field name="model">sambandha.deal.room</field>
+        <field name="arch" type="xml">
+            <form string="Deal Room">
+                <header>
+                    <button name="action_mark_won" type="object" string="Mark Won"
+                            class="btn-success" invisible="state != 'active'"/>
+                    <button name="action_mark_lost" type="object" string="Mark Lost"
+                            class="btn-danger" invisible="state != 'active'"/>
+                    <button name="action_archive" type="object" string="Archive"
+                            invisible="state in ('archived',)"/>
+                    <button name="action_reactivate" type="object" string="Reactivate"
+                            invisible="state == 'active'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="active,won"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-tasks">
+                            <field name="pending_action_count" widget="statinfo"
+                                   string="Pending Actions"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-file-o">
+                            <field name="document_count" widget="statinfo"
+                                   string="Documents"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Deal Room Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Opportunity">
+                            <field name="lead_id"/>
+                            <field name="partner_id"/>
+                            <field name="stage_id"/>
+                            <field name="expected_revenue"/>
+                            <field name="probability" widget="progressbar"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Team &amp; Timeline">
+                            <field name="user_id"/>
+                            <field name="team_member_ids" widget="many2many_tags"
+                                   options="{'color_field': 'color'}"/>
+                            <field name="target_close_date"/>
+                            <field name="next_meeting_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Action Items" name="actions">
+                            <field name="action_item_ids" nolabel="1">
+                                <tree editable="bottom"
+                                      decoration-success="state == 'done'"
+                                      decoration-muted="state == 'cancelled'"
+                                      decoration-danger="deadline and deadline &lt; current_date and state not in ('done', 'cancelled')">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="assigned_to" widget="many2one_avatar_user"/>
+                                    <field name="deadline"/>
+                                    <field name="priority" widget="priority"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'done'"
+                                           decoration-info="state == 'in_progress'"
+                                           decoration-muted="state == 'cancelled'"/>
+                                    <button name="action_done" type="object"
+                                            icon="fa-check" title="Mark Done"
+                                            invisible="state in ('done', 'cancelled')"/>
+                                    <button name="action_cancel" type="object"
+                                            icon="fa-times" title="Cancel"
+                                            invisible="state in ('done', 'cancelled')"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Strategy" name="strategy">
+                            <group string="Win Strategy">
+                                <field name="win_strategy" nolabel="1"/>
+                            </group>
+                            <group string="Competitor Intelligence">
+                                <field name="competitor_info" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Notes &amp; Documents" name="notes">
+                            <group string="Strategy Notes">
+                                <field name="notes" nolabel="1"/>
+                            </group>
+                            <group string="Shared Documents">
+                                <field name="document_ids" nolabel="1" widget="many2many_binary"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Deal Room: Search View -->
+    <record id="view_deal_room_search" model="ir.ui.view">
+        <field name="name">sambandha.deal.room.search</field>
+        <field name="model">sambandha.deal.room</field>
+        <field name="arch" type="xml">
+            <search string="Deal Rooms">
+                <field name="name"/>
+                <field name="lead_id"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter name="active_rooms" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="won" string="Won" domain="[('state', '=', 'won')]"/>
+                <filter name="lost" string="Lost" domain="[('state', '=', 'lost')]"/>
+                <filter name="has_pending" string="Has Pending Actions"
+                        domain="[('action_item_ids.state', 'in', ['todo', 'in_progress'])]"/>
+                <separator/>
+                <filter name="my_rooms" string="My Rooms" domain="[('user_id', '=', uid)]"/>
+                <filter name="my_team" string="My Team"
+                        domain="[('team_member_ids', 'in', uid)]"/>
+                <separator/>
+                <filter name="group_state" string="Status"
+                        context="{'group_by': 'state'}"/>
+                <filter name="group_user" string="Owner"
+                        context="{'group_by': 'user_id'}"/>
+                <filter name="group_stage" string="Pipeline Stage"
+                        context="{'group_by': 'stage_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Deal Room: Kanban View -->
+    <record id="view_deal_room_kanban" model="ir.ui.view">
+        <field name="name">sambandha.deal.room.kanban</field>
+        <field name="model">sambandha.deal.room</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="lead_id"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="expected_revenue"/>
+                <field name="pending_action_count"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <strong><field name="name"/></strong>
+                                <div><field name="lead_id"/></div>
+                                <div class="text-muted"><field name="partner_id"/></div>
+                                <div class="mt-2">
+                                    <field name="expected_revenue" widget="monetary"/>
+                                </div>
+                                <div class="mt-1">
+                                    <span class="badge rounded-pill bg-warning"
+                                          t-if="record.pending_action_count.raw_value > 0">
+                                        <t t-out="record.pending_action_count.value"/> pending
+                                    </span>
+                                </div>
+                                <div class="mt-2">
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Deal Room: Action -->
+    <record id="action_deal_rooms" model="ir.actions.act_window">
+        <field name="name">Deal Rooms</field>
+        <field name="res_model">sambandha.deal.room</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'search_default_active_rooms': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Deal Room
+            </p>
+            <p>Deal Rooms are shared collaboration spaces for your sales opportunities.
+            Add team members, action items, strategy notes, and documents to close deals faster.</p>
+        </field>
+    </record>
+
+    <!-- Add Deal Room button to CRM Lead form -->
+    <record id="view_crm_lead_form_deal_room_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.deal.room</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_open_deal_room" type="object"
+                        class="oe_stat_button" icon="fa-handshake-o"
+                        invisible="type != 'opportunity'">
+                    <field name="sp_deal_room_count" widget="statinfo" string="Deal Room"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

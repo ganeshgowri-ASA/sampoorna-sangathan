@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Leave Dashboard List -->
+    <record id="hr_leave_dashboard_tree" model="ir.ui.view">
+        <field name="name">hr.leave.dashboard.list</field>
+        <field name="model">hr.leave.dashboard</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="total_remaining &lt; 0">
+                <field name="employee_name"/>
+                <field name="department_id"/>
+                <field name="leave_type_id"/>
+                <field name="total_allocated"/>
+                <field name="total_taken"/>
+                <field name="total_remaining"
+                       decoration-danger="total_remaining &lt; 0"
+                       decoration-success="total_remaining &gt; 0"/>
+                <field name="year"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Leave Dashboard Pivot -->
+    <record id="hr_leave_dashboard_pivot" model="ir.ui.view">
+        <field name="name">hr.leave.dashboard.pivot</field>
+        <field name="model">hr.leave.dashboard</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="department_id" type="row"/>
+                <field name="leave_type_id" type="col"/>
+                <field name="total_taken" type="measure"/>
+                <field name="total_remaining" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Leave Dashboard Graph -->
+    <record id="hr_leave_dashboard_graph" model="ir.ui.view">
+        <field name="name">hr.leave.dashboard.graph</field>
+        <field name="model">hr.leave.dashboard</field>
+        <field name="arch" type="xml">
+            <graph type="bar">
+                <field name="department_id"/>
+                <field name="total_taken" type="measure"/>
+                <field name="total_remaining" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Leave Dashboard Search -->
+    <record id="hr_leave_dashboard_search" model="ir.ui.view">
+        <field name="name">hr.leave.dashboard.search</field>
+        <field name="model">hr.leave.dashboard</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_name"/>
+                <field name="department_id"/>
+                <field name="leave_type_id"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_department" string="Department"
+                            context="{'group_by': 'department_id'}"/>
+                    <filter name="group_leave_type" string="Leave Type"
+                            context="{'group_by': 'leave_type_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hr_leave_dashboard" model="ir.actions.act_window">
+        <field name="name">Leave Dashboard</field>
+        <field name="res_model">hr.leave.dashboard</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="search_view_id" ref="hr_leave_dashboard_search"/>
+    </record>
+
+</odoo>

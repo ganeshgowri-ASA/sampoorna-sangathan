@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Meeting Room Views -->
+    <record id="lekha_meeting_room_list" model="ir.ui.view">
+        <field name="name">lekha.meeting.room.list</field>
+        <field name="model">lekha.meeting.room</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="capacity"/>
+                <field name="location"/>
+                <field name="has_projector"/>
+                <field name="has_whiteboard"/>
+                <field name="has_video_conf"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="lekha_meeting_room_form" model="ir.ui.view">
+        <field name="name">lekha.meeting.room.form</field>
+        <field name="model">lekha.meeting.room</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Room Name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="capacity"/>
+                            <field name="location"/>
+                        </group>
+                        <group>
+                            <field name="has_projector"/>
+                            <field name="has_whiteboard"/>
+                            <field name="has_video_conf"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Facilities" name="facilities">
+                            <field name="facilities" placeholder="Describe available facilities..."/>
+                        </page>
+                        <page string="Bookings" name="bookings">
+                            <field name="booking_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="start_datetime"/>
+                                    <field name="stop_datetime"/>
+                                    <field name="organizer_id" widget="many2one_avatar_user"/>
+                                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-danger="state == 'cancelled'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="lekha_meeting_room_kanban" model="ir.ui.view">
+        <field name="name">lekha.meeting.room.kanban</field>
+        <field name="model">lekha.meeting.room</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <strong><field name="name"/></strong>
+                                <div class="text-muted"><field name="location"/></div>
+                                <div class="mt-1">
+                                    <span>Capacity: <field name="capacity"/></span>
+                                </div>
+                                <div class="mt-1 d-flex gap-2">
+                                    <span t-if="record.has_projector.raw_value" class="badge text-bg-info">Projector</span>
+                                    <span t-if="record.has_whiteboard.raw_value" class="badge text-bg-info">Whiteboard</span>
+                                    <span t-if="record.has_video_conf.raw_value" class="badge text-bg-info">Video</span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Room Booking Views -->
+    <record id="lekha_room_booking_list" model="ir.ui.view">
+        <field name="name">lekha.room.booking.list</field>
+        <field name="model">lekha.room.booking</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="room_id"/>
+                <field name="start_datetime"/>
+                <field name="stop_datetime"/>
+                <field name="organizer_id" widget="many2one_avatar_user"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-danger="state == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="lekha_room_booking_form" model="ir.ui.view">
+        <field name="name">lekha.room.booking.form</field>
+        <field name="model">lekha.room.booking</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state != 'confirmed'"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="room_id"/>
+                            <field name="organizer_id" widget="many2one_avatar_user"/>
+                        </group>
+                        <group>
+                            <field name="start_datetime"/>
+                            <field name="stop_datetime"/>
+                            <field name="calendar_event_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="lekha_room_booking_search" model="ir.ui.view">
+        <field name="name">lekha.room.booking.search</field>
+        <field name="model">lekha.room.booking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="room_id"/>
+                <field name="organizer_id"/>
+                <separator/>
+                <filter string="My Bookings" name="my_bookings" domain="[('organizer_id', '=', uid)]"/>
+                <filter string="Upcoming" name="upcoming" domain="[('start_datetime', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Room" name="group_room" context="{'group_by': 'room_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Calendar Event Inheritance -->
+    <record id="lekha_calendar_event_form_inherit" model="ir.ui.view">
+        <field name="name">calendar.event.form.inherit.lekha</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <field name="room_booking_id"/>
+                <field name="meeting_room_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_lekha_meeting_room" model="ir.actions.act_window">
+        <field name="name">Meeting Rooms</field>
+        <field name="res_model">lekha.meeting.room</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add a meeting room</p>
+            <p>Set up your meeting rooms and their facilities.</p>
+        </field>
+    </record>
+
+    <record id="action_lekha_room_booking" model="ir.actions.act_window">
+        <field name="name">Room Bookings</field>
+        <field name="res_model">lekha.room.booking</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="lekha_room_booking_search"/>
+        <field name="context">{'search_default_upcoming': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Book a meeting room</p>
+        </field>
+    </record>
+</odoo>
