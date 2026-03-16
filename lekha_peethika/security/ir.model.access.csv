@@ -3,6 +3,12 @@ access_document_category_user,lekha.document.category.user,model_lekha_document_
 access_document_category_manager,lekha.document.category.manager,model_lekha_document_category,hr.group_hr_manager,1,1,1,1
 access_document_tag_user,lekha.document.tag.user,model_lekha_document_tag,base.group_user,1,0,0,0
 access_document_tag_manager,lekha.document.tag.manager,model_lekha_document_tag,hr.group_hr_manager,1,1,1,1
+access_document_template_user,lekha.document.template.user,model_lekha_document_template,base.group_user,1,0,0,0
+access_document_template_manager,lekha.document.template.manager,model_lekha_document_template,hr.group_hr_manager,1,1,1,1
+access_document_version_user,lekha.document.version.user,model_lekha_document_version,base.group_user,1,0,0,0
+access_document_version_manager,lekha.document.version.manager,model_lekha_document_version,hr.group_hr_manager,1,0,0,0
+access_document_collaborator_user,lekha.document.collaborator.user,model_lekha_document_collaborator,base.group_user,1,1,1,1
+access_document_collaborator_manager,lekha.document.collaborator.manager,model_lekha_document_collaborator,hr.group_hr_manager,1,1,1,1
 access_document_user,lekha.document.user,model_lekha_document,base.group_user,1,1,1,0
 access_document_manager,lekha.document.manager,model_lekha_document,hr.group_hr_manager,1,1,1,1
 access_meeting_room_user,lekha.meeting.room.user,model_lekha_meeting_room,base.group_user,1,0,0,0

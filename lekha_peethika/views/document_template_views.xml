@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Document Template List View -->
+    <record id="lekha_document_template_list" model="ir.ui.view">
+        <field name="name">lekha.document.template.list</field>
+        <field name="model">lekha.document.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="document_type"/>
+                <field name="category_id"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="document_count"/>
+                <field name="active" column_invisible="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Document Template Form View -->
+    <record id="lekha_document_template_form" model="ir.ui.view">
+        <field name="name">lekha.document.template.form</field>
+        <field name="model">lekha.document.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_create_document"
+                        string="Create Document from Template"
+                        type="object"
+                        class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_create_document"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-file-text-o">
+                            <field name="document_count" widget="statinfo" string="Documents"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Template Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="document_type"/>
+                            <field name="category_id"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Template Content" name="content">
+                            <field name="content"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Document Template Kanban View -->
+    <record id="lekha_document_template_kanban" model="ir.ui.view">
+        <field name="name">lekha.document.template.kanban</field>
+        <field name="model">lekha.document.template</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <strong><field name="name"/></strong>
+                                <div class="text-muted small">
+                                    <field name="document_type"/>
+                                </div>
+                                <div class="mt-1">
+                                    <field name="category_id"/>
+                                </div>
+                                <div class="mt-1">
+                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                </div>
+                                <div class="mt-2">
+                                    <span class="badge bg-secondary">
+                                        <field name="document_count"/> documents
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Document Template Search View -->
+    <record id="lekha_document_template_search" model="ir.ui.view">
+        <field name="name">lekha.document.template.search</field>
+        <field name="model">lekha.document.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="tag_ids"/>
+                <separator/>
+                <filter string="General" name="type_general"
+                    domain="[('document_type', '=', 'general')]"/>
+                <filter string="Procedures / SOPs" name="type_procedure"
+                    domain="[('document_type', '=', 'procedure')]"/>
+                <filter string="Forms" name="type_form"
+                    domain="[('document_type', '=', 'form')]"/>
+                <filter string="Reports" name="type_report"
+                    domain="[('document_type', '=', 'report')]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Document Type" name="group_type"
+                        context="{'group_by': 'document_type'}"/>
+                    <filter string="Category" name="group_category"
+                        context="{'group_by': 'category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_lekha_document_template" model="ir.actions.act_window">
+        <field name="name">Document Templates</field>
+        <field name="res_model">lekha.document.template</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="lekha_document_template_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first document template</p>
+            <p>Templates speed up document creation by providing pre-structured content for common document types.</p>
+        </field>
+    </record>
+</odoo>

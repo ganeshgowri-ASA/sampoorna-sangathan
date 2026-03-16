@@ -9,7 +9,21 @@ class Document(models.Model):
 
     name = fields.Char(string='Document Title', required=True, tracking=True)
     reference = fields.Char(string='Reference', copy=False, readonly=True, default='New')
-    description = fields.Html(string='Description')
+    document_type = fields.Selection([
+        ('general', 'General Document'),
+        ('procedure', 'Procedure / SOP'),
+        ('form', 'Form / Checklist'),
+        ('report', 'Report'),
+        ('letter', 'Letter / Memo'),
+        ('policy', 'Policy Document'),
+    ], string='Document Type', default='general', tracking=True)
+    classification = fields.Selection([
+        ('public', 'Public'),
+        ('internal', 'Internal'),
+        ('confidential', 'Confidential'),
+        ('restricted', 'Restricted'),
+    ], string='Classification', default='internal', tracking=True)
+    description = fields.Html(string='Content')
     category_id = fields.Many2one(
         'lekha.document.category',
         string='Category',
@@ -22,6 +36,12 @@ class Document(models.Model):
         'document_id',
         'tag_id',
         string='Tags',
+    )
+    template_id = fields.Many2one(
+        'lekha.document.template',
+        string='Created from Template',
+        ondelete='set null',
+        tracking=True,
     )
     attachment_ids = fields.Many2many(
         'ir.attachment',
@@ -43,6 +63,16 @@ class Document(models.Model):
         tracking=True,
     )
     version = fields.Integer(string='Version', default=1, readonly=True)
+    version_history_ids = fields.One2many(
+        'lekha.document.version',
+        'document_id',
+        string='Version History',
+    )
+    collaborator_ids = fields.One2many(
+        'lekha.document.collaborator',
+        'document_id',
+        string='Collaborators',
+    )
     expiry_date = fields.Date(string='Expiry Date', tracking=True)
     is_expired = fields.Boolean(string='Expired', compute='_compute_is_expired', store=True)
     company_id = fields.Many2one(
@@ -65,14 +95,33 @@ class Document(models.Model):
                 vals['reference'] = self.env['ir.sequence'].next_by_code('lekha.document') or 'New'
         return super().create(vals_list)
 
+    def _create_version_snapshot(self, change_summary=''):
+        """Create a version history entry for the current document state."""
+        self.ensure_one()
+        self.env['lekha.document.version'].create({
+            'document_id': self.id,
+            'version_number': self.version,
+            'content_snapshot': self.description,
+            'change_summary': change_summary,
+            'state_at_version': self.state,
+            'created_by_id': self.env.user.id,
+        })
+
     def action_submit_review(self):
-        self.write({'state': 'review'})
+        for rec in self:
+            rec._create_version_snapshot(change_summary='Submitted for review')
+            rec.write({'state': 'review'})
 
     def action_approve(self):
-        self.write({'state': 'approved'})
+        for rec in self:
+            new_version = rec.version + 1
+            rec._create_version_snapshot(change_summary=f'Approved — version {new_version} created')
+            rec.write({'state': 'approved', 'version': new_version})
 
     def action_archive(self):
-        self.write({'state': 'archived'})
+        for rec in self:
+            rec._create_version_snapshot(change_summary='Archived')
+            rec.write({'state': 'archived'})
 
     def action_reset_draft(self):
         self.write({'state': 'draft'})

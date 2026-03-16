@@ -59,6 +59,25 @@
         </field>
     </record>
 
+    <!-- Document Version History List (inline) -->
+    <record id="lekha_document_version_list" model="ir.ui.view">
+        <field name="name">lekha.document.version.list</field>
+        <field name="model">lekha.document.version</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" delete="false">
+                <field name="version_number"/>
+                <field name="state_at_version" widget="badge"
+                    decoration-info="state_at_version == 'draft'"
+                    decoration-warning="state_at_version == 'review'"
+                    decoration-success="state_at_version == 'approved'"
+                    decoration-muted="state_at_version == 'archived'"/>
+                <field name="change_summary"/>
+                <field name="created_by_id" widget="many2one_avatar_user"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
     <!-- Document Views -->
     <record id="lekha_document_list" model="ir.ui.view">
         <field name="name">lekha.document.list</field>
@@ -67,13 +86,19 @@
             <tree decoration-danger="is_expired" decoration-muted="state == 'archived'">
                 <field name="reference"/>
                 <field name="name"/>
+                <field name="document_type"/>
+                <field name="classification"/>
                 <field name="category_id"/>
                 <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                 <field name="owner_id" widget="many2one_avatar_user"/>
                 <field name="version"/>
                 <field name="expiry_date"/>
                 <field name="is_expired" column_invisible="True"/>
-                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'review'" decoration-success="state == 'approved'" decoration-muted="state == 'archived'"/>
+                <field name="state" widget="badge"
+                    decoration-info="state == 'draft'"
+                    decoration-warning="state == 'review'"
+                    decoration-success="state == 'approved'"
+                    decoration-muted="state == 'archived'"/>
             </tree>
         </field>
     </record>
@@ -84,10 +109,15 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_submit_review" string="Submit for Review" type="object" class="btn-primary" invisible="state != 'draft'"/>
-                    <button name="action_approve" string="Approve" type="object" class="btn-primary" invisible="state != 'review'" groups="hr.group_hr_manager"/>
-                    <button name="action_archive" string="Archive" type="object" invisible="state not in ('draft', 'approved')"/>
-                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
+                    <button name="action_submit_review" string="Submit for Review" type="object"
+                        class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object"
+                        class="btn-primary" invisible="state != 'review'"
+                        groups="hr.group_hr_manager"/>
+                    <button name="action_archive" string="Archive" type="object"
+                        invisible="state not in ('draft', 'approved')"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object"
+                        invisible="state == 'draft'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,review,approved"/>
                 </header>
                 <sheet>
@@ -100,11 +130,14 @@
                     </div>
                     <group>
                         <group>
+                            <field name="document_type"/>
+                            <field name="classification"/>
                             <field name="category_id"/>
                             <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                            <field name="owner_id" widget="many2one_avatar_user"/>
+                            <field name="template_id"/>
                         </group>
                         <group>
+                            <field name="owner_id" widget="many2one_avatar_user"/>
                             <field name="version"/>
                             <field name="expiry_date"/>
                             <field name="is_expired"/>
@@ -114,6 +147,33 @@
                     <notebook>
                         <page string="Content" name="content">
                             <field name="description"/>
+                        </page>
+                        <page string="Collaborators" name="collaborators">
+                            <field name="collaborator_ids">
+                                <tree editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="permission"/>
+                                    <field name="added_by_id" readonly="1"/>
+                                    <field name="added_date" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Version History" name="version_history">
+                            <field name="version_history_ids"
+                                widget="one2many"
+                                context="{'default_document_id': active_id}">
+                                <tree create="false" edit="false" delete="false">
+                                    <field name="version_number"/>
+                                    <field name="state_at_version" widget="badge"
+                                        decoration-info="state_at_version == 'draft'"
+                                        decoration-warning="state_at_version == 'review'"
+                                        decoration-success="state_at_version == 'approved'"
+                                        decoration-muted="state_at_version == 'archived'"/>
+                                    <field name="change_summary"/>
+                                    <field name="created_by_id" widget="many2one_avatar_user"/>
+                                    <field name="create_date"/>
+                                </tree>
+                            </field>
                         </page>
                         <page string="Attachments" name="attachments">
                             <field name="attachment_ids"/>
@@ -141,12 +201,20 @@
                             <div class="oe_kanban_content">
                                 <strong><field name="name"/></strong>
                                 <div class="text-muted"><field name="reference"/></div>
+                                <div class="small text-muted">
+                                    <field name="document_type"/>
+                                    <span t-if="record.classification.raw_value != 'public'">
+                                        · <field name="classification"/>
+                                    </span>
+                                </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                                    <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'review': 'warning', 'approved': 'success', 'archived': 'secondary'}}"/>
+                                    <field name="state" widget="label_selection"
+                                        options="{'classes': {'draft': 'default', 'review': 'warning', 'approved': 'success', 'archived': 'secondary'}}"/>
                                 </div>
-                                <div class="mt-1">
+                                <div class="mt-1 d-flex justify-content-between">
                                     <field name="owner_id" widget="many2one_avatar_user"/>
+                                    <span class="text-muted small">v<field name="version"/></span>
                                 </div>
                             </div>
                         </div>
@@ -172,12 +240,19 @@
                 <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
                 <filter string="Expired" name="expired" domain="[('is_expired', '=', True)]"/>
                 <separator/>
+                <filter string="Confidential" name="confidential"
+                    domain="[('classification', 'in', ('confidential', 'restricted'))]"/>
+                <separator/>
                 <filter string="My Documents" name="my_documents" domain="[('owner_id', '=', uid)]"/>
+                <filter string="Shared with Me" name="shared_with_me"
+                    domain="[('collaborator_ids.user_id', '=', uid)]"/>
                 <separator/>
                 <group expand="0" string="Group By">
                     <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Document Type" name="group_type" context="{'group_by': 'document_type'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
                     <filter string="Owner" name="group_owner" context="{'group_by': 'owner_id'}"/>
+                    <filter string="Classification" name="group_classification" context="{'group_by': 'classification'}"/>
                 </group>
             </search>
         </field>
@@ -192,7 +267,7 @@
         <field name="context">{'search_default_my_documents': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Create your first document</p>
-            <p>Organize and manage your company documents with categories and tags.</p>
+            <p>Organize and manage your company documents with categories, tags, and version control.</p>
         </field>
     </record>
 
