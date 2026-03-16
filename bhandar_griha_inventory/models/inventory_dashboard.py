@@ -88,6 +88,7 @@ class BhandarGrihaDashboard(models.Model):
                     low_count += 1
             rec.low_stock_count = low_count
 
+    @api.depends('warehouse_id', 'date')
     def _compute_move_summary(self):
         today_start = fields.Datetime.start_of(fields.Datetime.now(), 'day')
         today_end = fields.Datetime.end_of(fields.Datetime.now(), 'day')

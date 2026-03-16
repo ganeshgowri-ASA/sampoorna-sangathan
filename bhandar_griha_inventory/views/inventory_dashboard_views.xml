@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Dashboard Tree View -->
-    <record id="bhandar_griha_dashboard_tree" model="ir.ui.view">
+    <record id="bhandar_griha_inventory_dashboard_tree" model="ir.ui.view">
         <field name="name">bhandar.griha.inventory.dashboard.tree</field>
         <field name="model">bhandar.griha.inventory.dashboard</field>
         <field name="arch" type="xml">
@@ -23,7 +23,7 @@
     </record>
 
     <!-- Dashboard Form View -->
-    <record id="bhandar_griha_dashboard_form" model="ir.ui.view">
+    <record id="bhandar_griha_inventory_dashboard_form" model="ir.ui.view">
         <field name="name">bhandar.griha.inventory.dashboard.form</field>
         <field name="model">bhandar.griha.inventory.dashboard</field>
         <field name="arch" type="xml">
@@ -73,7 +73,7 @@
     </record>
 
     <!-- Dashboard Graph View -->
-    <record id="bhandar_griha_dashboard_graph" model="ir.ui.view">
+    <record id="bhandar_griha_inventory_dashboard_graph" model="ir.ui.view">
         <field name="name">bhandar.griha.inventory.dashboard.graph</field>
         <field name="model">bhandar.griha.inventory.dashboard</field>
         <field name="arch" type="xml">
@@ -87,7 +87,7 @@
     </record>
 
     <!-- Dashboard Pivot View -->
-    <record id="bhandar_griha_dashboard_pivot" model="ir.ui.view">
+    <record id="bhandar_griha_inventory_dashboard_pivot" model="ir.ui.view">
         <field name="name">bhandar.griha.inventory.dashboard.pivot</field>
         <field name="model">bhandar.griha.inventory.dashboard</field>
         <field name="arch" type="xml">
@@ -101,7 +101,7 @@
     </record>
 
     <!-- Dashboard Search View -->
-    <record id="bhandar_griha_dashboard_search" model="ir.ui.view">
+    <record id="bhandar_griha_inventory_dashboard_search" model="ir.ui.view">
         <field name="name">bhandar.griha.inventory.dashboard.search</field>
         <field name="model">bhandar.griha.inventory.dashboard</field>
         <field name="arch" type="xml">
@@ -128,11 +128,11 @@
     </record>
 
     <!-- Dashboard Action -->
-    <record id="action_bhandar_griha_dashboard" model="ir.actions.act_window">
+    <record id="action_bhandar_griha_inventory_dashboard" model="ir.actions.act_window">
         <field name="name">Inventory Dashboard</field>
         <field name="res_model">bhandar.griha.inventory.dashboard</field>
         <field name="view_mode">tree,form,graph,pivot</field>
-        <field name="search_view_id" ref="bhandar_griha_dashboard_search"/>
+        <field name="search_view_id" ref="bhandar_griha_inventory_dashboard_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first dashboard entry
