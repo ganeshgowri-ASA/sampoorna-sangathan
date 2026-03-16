@@ -78,7 +78,7 @@ class CrmLead(models.Model):
     sp_total_revenue = fields.Monetary(
         string='Total Revenue',
         compute='_compute_total_revenue',
-        currency_field='company_currency',
+        currency_field='currency_id',
     )
     sp_interaction_summary = fields.Html(
         string='Interaction Summary',

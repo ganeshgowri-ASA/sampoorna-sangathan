@@ -45,7 +45,7 @@ class DealRoom(models.Model):
         related='lead_id.stage_id', string='Pipeline Stage', readonly=True,
     )
     currency_id = fields.Many2one(
-        related='lead_id.company_currency', string='Currency', readonly=True,
+        related='lead_id.company_id.currency_id', string='Currency', readonly=True,
     )
 
     # Action items

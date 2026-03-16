@@ -70,7 +70,7 @@ class FollowupRule(models.Model):
     def _check_trigger_days(self):
         for rule in self:
             if rule.trigger_type in ('no_activity', 'stage_duration', 'no_followup') and rule.trigger_days < 1:
-                raise models.ValidationError(_('Days threshold must be at least 1.'))
+                raise ValidationError(_('Days threshold must be at least 1.'))
 
     def _get_matching_leads(self):
         """Find leads matching this rule's trigger conditions."""
