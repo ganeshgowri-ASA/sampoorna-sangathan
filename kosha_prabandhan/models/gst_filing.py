@@ -7,7 +7,7 @@ class GstFiling(models.Model):
     _description = 'GST Filing Status Tracker'
     _inherit = ['mail.thread']
     _order = 'period desc'
-    _rec_name = 'display_name'
+    _rec_name = 'period'
 
     period = fields.Char(
         string='Tax Period', required=True, tracking=True,
@@ -57,13 +57,11 @@ class GstFiling(models.Model):
          'A filing record for this period and return type already exists.'),
     ]
 
-    def _get_display_name(self):
+    def _compute_display_name(self):
         for rec in self:
             rec.display_name = '%s - %s' % (
                 rec.period, dict(self._fields['return_type'].selection).get(rec.return_type, ''),
             )
-
-    display_name = fields.Char(compute='_get_display_name')
 
     @api.depends('period', 'return_type')
     def _compute_tax_amounts(self):

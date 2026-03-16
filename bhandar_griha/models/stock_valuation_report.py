@@ -27,9 +27,8 @@ class StockValuationReport(models.Model):
                     pt.categ_id AS product_categ_id,
                     sw.id AS warehouse_id,
                     SUM(sq.quantity) AS quantity,
-                    COALESCE(pp.id, 0) AS product_variant_id,
-                    ir.value_float AS standard_price,
-                    SUM(sq.quantity) * COALESCE(ir.value_float, 0) AS total_value,
+                    pt.standard_price AS standard_price,
+                    SUM(sq.quantity) * COALESCE(pt.standard_price, 0) AS total_value,
                     sq.company_id
                 FROM stock_quant sq
                 JOIN stock_location sl ON sl.id = sq.location_id
@@ -37,13 +36,9 @@ class StockValuationReport(models.Model):
                     OR sl.id = sw.lot_stock_id
                 JOIN product_product pp ON pp.id = sq.product_id
                 JOIN product_template pt ON pt.id = pp.product_tmpl_id
-                LEFT JOIN ir_property ir ON
-                    ir.name = 'standard_price'
-                    AND ir.res_id = CONCAT('product.product,', pp.id)
-                    AND ir.company_id = sq.company_id
                 WHERE sl.usage = 'internal'
                 GROUP BY
                     sq.product_id, pt.categ_id, sw.id,
-                    pp.id, ir.value_float, sq.company_id
+                    pt.standard_price, sq.company_id
             )
         """ % self._table)

@@ -2,8 +2,8 @@
 <odoo>
     <!-- Dashboard Tree View -->
     <record id="bhandar_griha_dashboard_tree" model="ir.ui.view">
-        <field name="name">bhandar.griha.dashboard.tree</field>
-        <field name="model">bhandar.griha.dashboard</field>
+        <field name="name">bhandar.griha.inventory.dashboard.tree</field>
+        <field name="model">bhandar.griha.inventory.dashboard</field>
         <field name="arch" type="xml">
             <tree decoration-danger="state == 'critical'" decoration-warning="state == 'warning'">
                 <field name="name"/>
@@ -24,8 +24,8 @@
 
     <!-- Dashboard Form View -->
     <record id="bhandar_griha_dashboard_form" model="ir.ui.view">
-        <field name="name">bhandar.griha.dashboard.form</field>
-        <field name="model">bhandar.griha.dashboard</field>
+        <field name="name">bhandar.griha.inventory.dashboard.form</field>
+        <field name="model">bhandar.griha.inventory.dashboard</field>
         <field name="arch" type="xml">
             <form string="Inventory Dashboard">
                 <header>
@@ -74,8 +74,8 @@
 
     <!-- Dashboard Graph View -->
     <record id="bhandar_griha_dashboard_graph" model="ir.ui.view">
-        <field name="name">bhandar.griha.dashboard.graph</field>
-        <field name="model">bhandar.griha.dashboard</field>
+        <field name="name">bhandar.griha.inventory.dashboard.graph</field>
+        <field name="model">bhandar.griha.inventory.dashboard</field>
         <field name="arch" type="xml">
             <graph string="Stock Levels by Warehouse" type="bar">
                 <field name="warehouse_id"/>
@@ -88,8 +88,8 @@
 
     <!-- Dashboard Pivot View -->
     <record id="bhandar_griha_dashboard_pivot" model="ir.ui.view">
-        <field name="name">bhandar.griha.dashboard.pivot</field>
-        <field name="model">bhandar.griha.dashboard</field>
+        <field name="name">bhandar.griha.inventory.dashboard.pivot</field>
+        <field name="model">bhandar.griha.inventory.dashboard</field>
         <field name="arch" type="xml">
             <pivot string="Inventory Analytics">
                 <field name="warehouse_id" type="row"/>
@@ -102,8 +102,8 @@
 
     <!-- Dashboard Search View -->
     <record id="bhandar_griha_dashboard_search" model="ir.ui.view">
-        <field name="name">bhandar.griha.dashboard.search</field>
-        <field name="model">bhandar.griha.dashboard</field>
+        <field name="name">bhandar.griha.inventory.dashboard.search</field>
+        <field name="model">bhandar.griha.inventory.dashboard</field>
         <field name="arch" type="xml">
             <search string="Search Dashboard">
                 <field name="warehouse_id"/>
@@ -130,7 +130,7 @@
     <!-- Dashboard Action -->
     <record id="action_bhandar_griha_dashboard" model="ir.actions.act_window">
         <field name="name">Inventory Dashboard</field>
-        <field name="res_model">bhandar.griha.dashboard</field>
+        <field name="res_model">bhandar.griha.inventory.dashboard</field>
         <field name="view_mode">tree,form,graph,pivot</field>
         <field name="search_view_id" ref="bhandar_griha_dashboard_search"/>
         <field name="help" type="html">
