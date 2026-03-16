@@ -39,6 +39,7 @@ class WarehouseDashboard(models.Model):
             prod = rec.product_id.display_name or ''
             rec.name = f'{wh} - {prod}'
 
+    @api.depends('product_id', 'warehouse_id')
     def _compute_stock_levels(self):
         for rec in self:
             if rec.product_id and rec.warehouse_id:
