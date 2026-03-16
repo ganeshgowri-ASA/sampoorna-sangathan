@@ -42,7 +42,7 @@ class WarehouseDashboard(models.Model):
     @api.depends('product_id', 'warehouse_id')
     def _compute_stock_levels(self):
         for rec in self:
-            if rec.product_id and rec.warehouse_id:
+            if rec.product_id and rec.warehouse_id and rec.warehouse_id.lot_stock_id:
                 location = rec.warehouse_id.lot_stock_id
                 quants = self.env['stock.quant'].search([
                     ('product_id', '=', rec.product_id.id),
