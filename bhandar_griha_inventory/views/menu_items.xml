@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Top-level Bhandar Griha Menu -->
-    <menuitem id="menu_bhandar_griha_root"
+    <menuitem id="menu_bhandar_griha_inventory_root"
               name="Bhandar Griha"
               web_icon="bhandar_griha_inventory,static/description/icon.png"
               sequence="25"/>
 
     <!-- Dashboard Submenu -->
-    <menuitem id="menu_bhandar_griha_dashboard"
+    <menuitem id="menu_bhandar_griha_inventory_dashboard"
               name="Dashboard"
-              parent="menu_bhandar_griha_root"
-              action="action_bhandar_griha_dashboard"
+              parent="menu_bhandar_griha_inventory_root"
+              action="action_bhandar_griha_inventory_dashboard"
               sequence="1"/>
 
     <!-- Replenishment Submenu -->
     <menuitem id="menu_bhandar_griha_replenishment"
               name="Smart Replenishment"
-              parent="menu_bhandar_griha_root"
+              parent="menu_bhandar_griha_inventory_root"
               action="action_bhandar_griha_replenishment"
               sequence="2"/>
 
     <!-- Warehouses Submenu (link to stock warehouse with analytics) -->
     <menuitem id="menu_bhandar_griha_warehouses"
               name="Warehouse Analytics"
-              parent="menu_bhandar_griha_root"
+              parent="menu_bhandar_griha_inventory_root"
               action="stock.action_warehouse_form"
               sequence="3"/>
 </odoo>

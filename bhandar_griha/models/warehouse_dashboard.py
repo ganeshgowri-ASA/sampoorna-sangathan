@@ -9,18 +9,18 @@ class WarehouseDashboard(models.Model):
     warehouse_id = fields.Many2one('stock.warehouse', string='Warehouse', required=True)
     product_id = fields.Many2one('product.product', string='Product', required=True)
     current_stock = fields.Float(
-        string='Current Stock', compute='_compute_stock_levels', store=False,
+        string='Current Stock', compute='_compute_stock_levels', store=True,
     )
     reserved_qty = fields.Float(
-        string='Reserved Qty', compute='_compute_stock_levels', store=False,
+        string='Reserved Qty', compute='_compute_stock_levels', store=True,
     )
     available_qty = fields.Float(
-        string='Available Qty', compute='_compute_stock_levels', store=False,
+        string='Available Qty', compute='_compute_stock_levels', store=True,
     )
     reorder_level = fields.Float(string='Reorder Level', default=0.0)
     reorder_qty = fields.Float(string='Reorder Quantity', default=0.0)
     is_below_reorder = fields.Boolean(
-        string='Below Reorder Level', compute='_compute_is_below_reorder', store=False,
+        string='Below Reorder Level', compute='_compute_is_below_reorder', store=True,
     )
     company_id = fields.Many2one(
         'res.company', string='Company',
