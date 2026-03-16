@@ -4,7 +4,7 @@ import json
 import logging
 import time
 
-from odoo import http
+from odoo import fields, http
 from odoo.http import request, Response
 from odoo.exceptions import AccessDenied
 
@@ -103,7 +103,7 @@ def authenticate_request():
             ('active', '=', True),
         ], limit=1)
         if key_rec and not key_rec._is_expired() and key_rec._check_rate_limit():
-            key_rec.sudo().write({'last_used': time.strftime('%Y-%m-%d %H:%M:%S')})
+            key_rec.sudo().write({'last_used': fields.Datetime.now()})
             return key_rec.user_id.id
 
     return None

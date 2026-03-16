@@ -20,6 +20,9 @@
     'author': 'Sampoorna Sangathan',
     'website': 'https://sampoorna-sangathan.vercel.app',
     'license': 'LGPL-3',
+    'external_dependencies': {
+        'python': ['requests'],
+    },
     'depends': [
         'base',
         'sampoorna_sangathan_core',
