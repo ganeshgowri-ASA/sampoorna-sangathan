@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class ProjectProject(models.Model):
@@ -13,6 +13,7 @@ class ProjectProject(models.Model):
         string='Resource Allocations',
     )
 
+    @api.depends('sprint_ids')
     def _compute_sprint_count(self):
         for project in self:
             project.sprint_count = len(project.sprint_ids)
